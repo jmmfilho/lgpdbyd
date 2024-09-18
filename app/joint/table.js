@@ -21,9 +21,9 @@ uml.Class = joint.shapes.basic.Generic.extend({
         attrs: {
             rect: { 'width': 200 },
 
-            '.uml-class-name-rect': { 'stroke': 'black', 'stroke-width': 0.5, 'fill': '#3498db' },
-            '.uml-class-attrs-rect': { 'stroke': 'black', 'stroke-width': 0.5, 'fill': '#fff' },
-            '.uml-class-methods-rect': { 'stroke': 'black', 'stroke-width': 0.5, 'fill': '#fff' },
+            '.uml-class-name-rect': { 'stroke': 'black', 'stroke-width': 0.5, 'stroke-dasharray': 0, 'fill': '#3498db' },
+            '.uml-class-attrs-rect': { 'stroke': 'black', 'stroke-width': 0.5, 'stroke-dasharray': 0, 'fill': '#fff' },
+            '.uml-class-methods-rect': { 'stroke': 'black', 'stroke-width': 0.5, 'stroke-dasharray': 0, 'fill': '#fff' },
 
             '.uml-class-name-text': {
                 'ref': '.uml-class-name-rect', 'ref-y': .5, 'ref-x': .5, 'text-anchor': 'middle', 'y-alignment': 'middle', 'font-weight': 'bold',
@@ -38,7 +38,7 @@ uml.Class = joint.shapes.basic.Generic.extend({
                 'fill': 'black', 'font-size': 12, 'font-family': 'BlinkMacSystemFont,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif'
             }
         },
-
+        titular: false,
         name: [],
         attributes: [],
         methods: [],
@@ -47,6 +47,7 @@ uml.Class = joint.shapes.basic.Generic.extend({
     }, joint.shapes.basic.Generic.prototype.defaults),
 
     initialize: function () {
+
         this.on('change:name change:attributes change:methods', function () {
             this.updateRectangles();
             this.trigger('uml-update');
@@ -62,14 +63,66 @@ uml.Class = joint.shapes.basic.Generic.extend({
     },
 
     addAttribute: function (obj) {
+        let pkFkName = "";
+        if(obj.PK || obj.FK){
+            pkFkName = ":"
+        }
         if (obj.PK) {
-            obj.name = obj.name + ": PK";
+            pkFkName = pkFkName + " PK";
         }
 
         if (obj.FK) {
-            obj.name = obj.name + ": FK";
+            pkFkName = pkFkName + " FK";
         }
-
+        obj.name = obj.name + pkFkName
+        let lgpdText = " "
+        for(let i = 2; i>=0; i--){
+			if(obj.lgpd[i]){
+				switch(i){
+					case 2:
+						lgpdText+="[A]";
+						break;
+					case 1:
+						lgpdText+="[S]";
+						break;
+					case 0:
+						lgpdText+="[P]";
+					break;				
+				}
+			break;
+			}
+		}
+		for(let j = 3; j < obj.lgpd.length; j++){
+			if(obj.lgpd[j]){
+				switch(j){
+					case 3:
+						lgpdText+="[C]";
+						break;
+					case 4:
+						lgpdText+="[CS]"
+						break;
+					case 5:
+						lgpdText+="[PCS]"
+						break;
+					case 6:
+						lgpdText+="[F]"
+						break;
+					case 7:
+						lgpdText+="[CP]"
+						break;
+					case 8:
+						lgpdText+="[CAD]"
+						break;
+					case 9:
+						lgpdText+="[I]"
+						break;
+					case 10:
+						lgpdText+="[SI]"
+						break;
+				}
+			}
+		}
+        obj.name = obj.name + lgpdText;
         this.get('attributes').push(obj.name);
         this.get('objects').push(obj);
         this.updateRectangles();
@@ -91,6 +144,7 @@ uml.Class = joint.shapes.basic.Generic.extend({
     },
 
     updateRectangles: function () {
+
         var attrs = this.get('attrs');
 
         var rects = [
@@ -112,6 +166,7 @@ uml.Class = joint.shapes.basic.Generic.extend({
 
             offsetY += rectHeight;
         });
+
     },
 
     getType: function() {
@@ -195,6 +250,7 @@ uml.Abstract = joint.shapes.basic.Generic.extend({
     },
 
     updateRectangles: function () {
+
         var attrs = this.get('attrs');
 
         var rects = [
@@ -216,6 +272,7 @@ uml.Abstract = joint.shapes.basic.Generic.extend({
 
             offsetY += rectHeight;
         });
+
     },
 
     getType: function() {
@@ -224,35 +281,14 @@ uml.Abstract = joint.shapes.basic.Generic.extend({
 
 });
 
-const updateSize = function() {
-	const nameBox = this.$el.find(".uml-class-name-text")[0].getBBox();
-	const columnsBox = this.$el.find(".uml-class-attrs-text")[0].getBBox();
-
-	let elementWidth = Math.max(nameBox.width, columnsBox.width);
-
-	if(elementWidth > 100) {
-		this.model.attributes.size.width = elementWidth + 10;
-		this.resize();
-	}
-
-	if (columnsBox.height > 80) {
-		this.model.attributes.size.height = columnsBox.height + 40;
-		this.resize();
-	}
-}
-
 uml.ClassView = joint.dia.ElementView.extend({
     initialize: function () {
         joint.dia.ElementView.prototype.initialize.apply(this, arguments);
-    },
-	updateSize: updateSize
-});
-
-uml.AbstractView = joint.dia.ElementView.extend({
-    initialize: function () {
-        joint.dia.ElementView.prototype.initialize.apply(this, arguments);
-    },
-	updateSize: updateSize
+        this.listenTo(this.model, 'uml-update', function () {
+            this.update();
+            this.resize();
+        });
+    }
 });
 
 export default uml;

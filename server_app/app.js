@@ -13,6 +13,7 @@ require("dotenv").config();
 let app = express();
 app.use(cors());
 
+
 if (app.get("env") === "production") {
 	app.use(enforce.HTTPS({ trustProtoHeader: true }));
 }

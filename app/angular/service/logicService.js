@@ -8,7 +8,6 @@ import erd from "../../joint/shapes";
 import uml from "../../joint/table";
 joint.shapes.erd = erd;
 joint.shapes.uml = uml;
-
 import "jointjs/dist/joint.min.css";
 import "../editor/editorManager"
 import "../editor/editorScroller"
@@ -48,8 +47,7 @@ const logicService = ($rootScope, ModelAPI, LogicFactory, LogicConversorService)
 			gridSize: 10,
 			drawGrid: true,
 			model: ls.graph,
-			linkPinning: false,
-			cellViewNamespace: joint.shapes,
+			linkPinning: false
 		});
 
 		ls.editorActions = new joint.ui.EditorActions({graph: ls.graph, paper: ls.paper});
@@ -118,7 +116,6 @@ const logicService = ($rootScope, ModelAPI, LogicFactory, LogicConversorService)
 			if (cell.isLink()) {
 				var source = ls.graph.getCell(cell.get('source').id);
 				var target = ls.graph.getCell(cell.get('target').id);
-				if (source || target === null) return;
 				var objects = target.attributes.objects;
 				for (var i = 0; i < objects.length; i++) {
 					var object = objects[i];
@@ -176,6 +173,7 @@ const logicService = ($rootScope, ModelAPI, LogicFactory, LogicConversorService)
 		ls.paper.on('blank:pointerdown', (evt) => {
 			if (ls.selectedElement != null && ls.selectedElement.model != null) {
 				ls.checkAndEditTableName(ls.selectedElement.model);
+				ls.selectedElement.unhighlight();
 			}
 
 			ls.clearSelectedElement();
@@ -277,18 +275,25 @@ const logicService = ($rootScope, ModelAPI, LogicFactory, LogicConversorService)
 		newTable.attributes.position.x = (table.position.x);
 		newTable.attributes.position.y = (table.position.y);
 		newTable.set('name', table.name);
-
+		if(table.titular!=null){
+			newTable.attributes.titular = table.titular
+			if(table.titular){
+				newTable.attributes.attrs[".uml-class-attrs-rect"]['stroke-dasharray']=5
+				newTable.attributes.attrs[".uml-class-methods-rect"]['stroke-dasharray']=5
+				newTable.attributes.attrs[".uml-class-name-rect"]['stroke-dasharray']=5
+				}
+		}
 		var columns = table.columns;
 
 		for (var j = 0; j < columns.length; j++) {
 			const column = new Column({
 				name: columns[j].name,
 				PK: columns[j].PK,
+				lgpd: columns[j].lgpd,
 			});
 			newTable.addAttribute(column);
 		}
 		ls.graph.addCell(newTable);
-
 		return newTable;
 	}
 
@@ -339,6 +344,9 @@ const logicService = ($rootScope, ModelAPI, LogicFactory, LogicConversorService)
 			ls.selectedActions.remove();
 			ls.selectedActions = null;
 		}
+		if (ls.selectedElement != null && ls.selectedElement.model != null) {
+			ls.selectedElement.unhighlight();
+		}
 		ls.selectedElement = {};
 		$rootScope.$broadcast('element:select', null);
 		$rootScope.$broadcast('link:select', null);
@@ -348,10 +356,12 @@ const logicService = ($rootScope, ModelAPI, LogicFactory, LogicConversorService)
 
 	ls.onSelectElement = function (cellView) {
 		var name = "";
+		if (ls.selectedElement.model != null) ls.selectedElement.unhighlight();
 		if (cellView.model.attributes.name != null) {
 			ls.elementSelector.cancel();
 			ls.selectedElement = cellView;
 			name = ls.selectedElement.model.attributes.name;
+			ls.selectedElement.highlight();
 			ls.applySelectionOptions(cellView);
 
 			var selected = ls.selectedElement.model.attributes.objects;
@@ -382,12 +392,70 @@ const logicService = ($rootScope, ModelAPI, LogicFactory, LogicConversorService)
 	}
 
 	ls.editColumn = function (index, editedColumn) {
+		var name = editedColumn.name.split('[')[0].split(':')[0];
+		console.log(name)
+		var tempLgpd = editedColumn.lgpd;
 
-		var name = editedColumn.name;
+		let pkFkName = "";
+        if(editedColumn.PK || editedColumn.FK){
+            pkFkName = ":"
+        }
+        if (editedColumn.PK) {
+            pkFkName = pkFkName + " PK";
+        }
 
-		if (editedColumn.PK) {
-			name = name + ": PK";
+        if (editedColumn.FK) {
+            pkFkName = pkFkName + " FK";
+        }
+        name = name + pkFkName
+		let lgpdText = " ";
+		for(let i = 2; i>=0; i--){
+			if(tempLgpd[i]){
+				switch(i){
+					case 2:
+						lgpdText+="[A]";
+						break;
+					case 1:
+						lgpdText+="[S]";
+						break;
+					case 0:
+						lgpdText+="[P]";
+					break;				
+				}
+			break;
+			}
 		}
+		for(let j = 3; j < tempLgpd.length; j++){
+			if(tempLgpd[j]){
+				switch(j){
+					case 3:
+						lgpdText+="[C]";
+						break;
+					case 4:
+						lgpdText+="[CS]"
+						break;
+					case 5:
+						lgpdText+="[PCS]"
+						break;
+					case 6:
+						lgpdText+="[F]"
+						break;
+					case 7:
+						lgpdText+="[CP]"
+						break;
+					case 8:
+						lgpdText+="[CAD]"
+						break;
+					case 9:
+						lgpdText+="[I]"
+						break;
+					case 10:
+						lgpdText+="[SI]"
+						break;
+				}
+			}
+		}
+		name = name + lgpdText
 		// ls.selectedElement.model.attributes.attributes[index] = name;
 		//  	ls.selectedElement.model.attributes.objects[index].name = name;
 
@@ -541,6 +609,7 @@ const logicService = ($rootScope, ModelAPI, LogicFactory, LogicConversorService)
 		elements.filter(isTable).forEach(element => {
 			var obj = {
 				name: element.attributes.name,
+				titular: element.attributes.titular,
 				columns: element.attributes.objects
 			}
 			map.set(element.id, obj);

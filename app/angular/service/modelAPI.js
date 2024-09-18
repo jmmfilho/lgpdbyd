@@ -51,46 +51,6 @@ const authService = ($http) => {
 			});
 	};
 
-	const _loadShareOptions = function (_modelId) {
-		return $http
-			.get(`/models/${_modelId}/share/options`)
-			.then(function (resp) {
-				return resp;
-			});
-	};
-
-	const _toggleShare = function (modelId, active, importAllowed) {
-		return $http
-			.post(`/models/share`, {"modelId": modelId, "active": active, "importAllowed": importAllowed})
-			.then(function (resp) {
-				return resp;
-			});
-	};
-
-	const _getSharedModel = function (shareId) {
-		return $http
-			.get(`/models/share/${shareId}`)
-			.then(function (resp) {
-				return resp;
-			});
-	};
-
-	const _importModel = function (shareId, userId) {
-		return $http
-			.post(`/models/import`, {shareId, userId})
-			.then(function (resp) {
-				return resp;
-			});
-	};
-
-	const _duplicate= function (modelId, userId, newName) {
-		return $http
-			.post(`/models/${modelId}/duplicate`, {"userId": userId, "newName": newName})
-			.then(function (resp) {
-				return resp;
-			});
-	};
-
 	return {
 		saveModel: _saveModel,
 		getAllModels: _getAllModels,
@@ -98,11 +58,6 @@ const authService = ($http) => {
 		updateModel: _updateModel,
 		deleteModel: _deleteModel,
 		renameModel: _renameModel,
-		loadShareOptions: _loadShareOptions,
-		toggleShare: _toggleShare,
-		getSharedModel: _getSharedModel,
-		importModel: _importModel,
-		duplicate: _duplicate
 	};
 };
 

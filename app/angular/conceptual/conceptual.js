@@ -16,7 +16,6 @@ import angular from "angular";
 import template from "./conceptual.html";
 
 import modelDuplicatorComponent from "../components/duplicateModelModal";
-import shareModelModal from "../components/shareModelModal";
 import statusBar from "../components/statusBar";
 
 import Factory from "./factory";
@@ -26,8 +25,6 @@ import EntityExtensor from "./entityExtensor";
 import KeyboardController, { types } from "../components/keyboardController";
 import ToolsViewService from "../service/toolsViewService";
 import preventExitServiceModule from "../service/preventExitService";
-import iconConceptual from  "../components/icons/conceptual";
-import supportBannersList from "../components/supportBannersList";
 
 const controller = function (ModelAPI, $stateParams, $rootScope, $timeout, $uibModal, $state, $transitions, preventExitService, $filter) {
 	const ctrl = this;
@@ -79,7 +76,7 @@ const controller = function (ModelAPI, $stateParams, $rootScope, $timeout, $uibM
 		ctrl.setLoading(true);
 		ctrl.model.model = JSON.stringify(configs.graph);
 		ModelAPI.updateModel(ctrl.model).then(function (res) {
-			ctrl.showFeedback(true, "Successfully saved!");
+			ctrl.showFeedback(true, "Saved successfully!");
 			ctrl.setLoading(false);
 		});
 	}
@@ -135,35 +132,9 @@ const controller = function (ModelAPI, $stateParams, $rootScope, $timeout, $uibM
 		});
 	};
 
-	ctrl.duplicateModel = (model) => {
-		const modalInstance = $uibModal.open({
-			animation: true,
-			template: `<duplicate-model-modal
-						suggested-name="$ctrl.suggestedName"
-						close="$close(result)"
-						dismiss="$dismiss(reason)"
-						user-id=$ctrl.userId
-						model-id=$ctrl.modelId>
-					</duplicate-model-modal>`,
-			controller: function() {
-				const $ctrl = this;
-				$ctrl.suggestedName = $filter('translate')("MODEL_NAME (copy)", { name: model.name });
-				$ctrl.modelId = model._id;
-				$ctrl.userId = model.who;
-			},
-			controllerAs: '$ctrl',
-		}).result;
-		modalInstance.then((newModel) => {
-			window.open($state.href('logic', { references: { 'modelid': newModel._id } }));
-			ctrl.showFeedback(true, "Successfully duplicated!");
-		}).catch(error => {
-			console.error(error);
-		});
-	};
-
 	ctrl.convertModel = (conceptualModel) => {
 		const model = {
-			"name": conceptualModel.name + $filter('translate')("_converted"),
+			"name": conceptualModel.name + $filter('translate')("_logical"),
 			"user": $rootScope.loggeduser,
 			"type": "logic",
 			"model": '{"cells":[]}'
@@ -173,25 +144,6 @@ const controller = function (ModelAPI, $stateParams, $rootScope, $timeout, $uibM
 				window.open($state.href('logic', { references: { 'modelid': newModel._id, 'conversionId': conceptualModel._id } }), '_blank');
 			});
 	}
-
-	ctrl.shareModel = (model) => {
-		const modalInstance = $uibModal.open({
-			animation: true,
-			backdrop: 'static',
-			keyboard: false,
-			template: '<share-model-modal close="$close(result)" dismiss="$dismiss()" model-id="$ctrl.modelId"></share-model-modal>',
-			controller: function() {
-				const $ctrl = this;
-				$ctrl.modelId = model._id;
-			},
-			controllerAs: '$ctrl',
-		}).result;
-		modalInstance.then(() => {
-			ctrl.showFeedback(true, $filter('translate')("Sharing configuration has been updated successfully!"));
-		}).catch((reason) => {
-			console.log("Modal dismissed with reason", reason);
-		});
-	};
 
 	ctrl.unselectAll = () => {
 		ctrl.showFeedback(false, "");
@@ -229,7 +181,8 @@ const controller = function (ModelAPI, $stateParams, $rootScope, $timeout, $uibM
 		switch (event.type) {
 			case 'name':
 				$timeout(() => {
-					ctrl.selectedElement.element.model.setText(event.value, ctrl.selectedElement.element);
+					ctrl.selectedElement.element.model.attributes.attrs.text.text = event.value;
+					ctrl.selectedElement.element.update();
 				});
 				break;
 			case 'extention':
@@ -242,9 +195,22 @@ const controller = function (ModelAPI, $stateParams, $rootScope, $timeout, $uibM
 					}
 				});
 				break;
+			case 'titular':
+					$timeout(() => {
+						const newValue = event.value;
+						const root = ctrl.selectedElement.element.model;
+						if(newValue) {
+							root.attributes.attrs['.outer']['stroke-dasharray']=5
+						} else {
+							root.attributes.attrs['.outer']['stroke-dasharray']=0
+						}
+						ctrl.selectedElement.element.update()
+					});
+				break;
 			case 'editExtention':
 				$timeout(() => {
-					ctrl.selectedElement.element.model.setText(event.value, ctrl.selectedElement.element);
+					ctrl.selectedElement.element.model.attributes.attrs.text.text = event.value;
+					ctrl.selectedElement.element.update();
 				});
 				break;
 			case 'addAutoRelationship':
@@ -289,25 +255,239 @@ const controller = function (ModelAPI, $stateParams, $rootScope, $timeout, $uibM
 				$timeout(() => {
 					const newCardinality = event.value;
 					let currentText = ctrl.selectedElement.value.name;
-
+					const currentLgpd = ctrl.selectedElement.element.model.attributes.lgpd;
 					if(newCardinality != '(1, 1)'){
 						currentText = currentText + " " + newCardinality;
 					}
+					if(currentLgpd != '[]' && currentLgpd != 'Nenhum'){
+						currentText = currentText + " " + currentLgpd;
+					}
 
+					ctrl.selectedElement.element.model.attributes.attrs.text.text = currentText;
 					ctrl.selectedElement.element.model.attributes.cardinality = newCardinality;
-					ctrl.selectedElement.element.model.setText(currentText, ctrl.selectedElement.element);
+					ctrl.selectedElement.element.update();
 				});
 				break;
+			case 'attribute.lgpd':
+					$timeout(() => {
+						const location = event.lgpd;
+						const newLgpd = event.value;
+						const currentLgpd = ctrl.selectedElement.value.lgpd;
+						let tempLgpd = currentLgpd;
+						tempLgpd[location]=newLgpd;
+						if(location<=2){
+							let current = 2;
+							while (current >=0){
+								if(current>location && !newLgpd){
+									tempLgpd[current]=false;
+								}
+								if(current<location && newLgpd){
+									tempLgpd[current]=true;
+								}
+								current--;
+							}
+						}
+
+
+						let currentText = ctrl.selectedElement.value.name;
+						const currentCardinality = ctrl.selectedElement.element.model.attributes.cardinality;
+						if(currentCardinality != '(1, 1)'){
+							currentText = currentText + " " + currentCardinality;
+						}
+						let lgpdText = "";
+						for(let i = 2; i>=0; i--){
+							if(tempLgpd[i]){
+								switch(i){
+									case 2:
+										lgpdText+="[A]";
+										break;
+									case 1:
+										lgpdText+="[S]";
+										break;
+									case 0:
+										lgpdText+="[P]";
+										break;
+
+								}
+							break;
+							}
+						}
+						for(let j = 3; j < tempLgpd.length; j++){
+							if(tempLgpd[j]){
+								switch(j){
+									case 3:
+										lgpdText+="[C]";
+										break;
+									case 4:
+										lgpdText+="[CS]"
+										break;
+									case 5:
+										lgpdText+="[PCS]"
+										break;
+									case 6:
+										lgpdText+="[F]"
+										break;
+									case 7:
+										lgpdText+="[CP]"
+										break;
+									case 8:
+										lgpdText+="[CAD]"
+										break;
+									case 9:
+										lgpdText+="[I]"
+										break;
+									case 10:
+										lgpdText+="[SI]"
+										break;
+								}
+							}
+						}
+						currentText = currentText + " " + lgpdText;
+
+						ctrl.selectedElement.element.model.attributes.attrs.text.text = currentText;
+						ctrl.selectedElement.element.model.attributes.lgpd = tempLgpd;
+						ctrl.selectedElement.element.update();
+					});
+					break;
+					case 'key.lgpd':
+						$timeout(() => {
+							const location = event.lgpd;
+							const newLgpd = event.value;
+							const currentLgpd = ctrl.selectedElement.element.model.attributes.lgpd;
+							let tempLgpd = currentLgpd;
+							tempLgpd[location]=newLgpd;
+							if(location<=2){
+								let current = 2;
+								while (current >=0){
+									if(current>location && !newLgpd){
+										tempLgpd[current]=false;
+									}
+									if(current<location && newLgpd){
+										tempLgpd[current]=true;
+									}
+									current--;
+								}
+							}
+
+
+							let currentText = ctrl.selectedElement.element.model.attributes.attrs.text.text.replace(/ *(\(|\[)[^)]*(\)|\]) */g, "");
+							let lgpdText = "";
+							for(let i = 2; i>=0; i--){
+								if(tempLgpd[i]){
+									switch(i){
+										case 2:
+											lgpdText+="[A]";
+											break;
+										case 1:
+											lgpdText+="[S]";
+											break;
+										case 0:
+											lgpdText+="[P]";
+											break;
+
+									}
+								break;
+								}
+							}
+							for(let j = 3; j < tempLgpd.length; j++){
+								if(tempLgpd[j]){
+									switch(j){
+										case 3:
+											lgpdText+="[C]";
+											break;
+										case 4:
+											lgpdText+="[CS]"
+											break;
+										case 5:
+											lgpdText+="[PCS]"
+											break;
+										case 6:
+											lgpdText+="[F]"
+											break;
+										case 7:
+											lgpdText+="[CP]"
+											break;
+										case 8:
+											lgpdText+="[CAD]"
+											break;
+										case 9:
+											lgpdText+="[I]"
+											break;
+										case 10:
+											lgpdText+="[SI]"
+											break;
+									}
+								}
+							}
+							currentText = currentText + " " + lgpdText;
+
+							ctrl.selectedElement.element.model.attributes.attrs.text.text = currentText;
+							ctrl.selectedElement.element.model.attributes.lgpd = tempLgpd;
+							ctrl.selectedElement.element.update();
+						});
+						break;
 			case 'attribute.name':
 				$timeout(() => {
 					let newName = event.value;
 					const currentCardinality = ctrl.selectedElement.value.cardinality;
-
+					const currentLgpd = ctrl.selectedElement.value.lgpd;
+					let tempLgpd = currentLgpd;
 					if(currentCardinality != '(1, 1)'){
 						newName = newName + " " + currentCardinality;
 					}
 
-					ctrl.selectedElement.element.model.setText(newName, ctrl.selectedElement.element);
+					let lgpdText = "";
+						for(let i = 2; i>=0; i--){
+							if(tempLgpd[i]){
+								switch(i){
+									case 2:
+										lgpdText+="[A]";
+										break;
+									case 1:
+										lgpdText+="[S]";
+										break;
+									case 0:
+										lgpdText+="[P]";
+										break;
+
+								}
+							break;
+							}
+						}
+						for(let j = 3; j < tempLgpd.length; j++){
+							if(tempLgpd[j]){
+								switch(j){
+									case 3:
+										lgpdText+="[C]";
+										break;
+									case 4:
+										lgpdText+="[CS]"
+										break;
+									case 5:
+										lgpdText+="[PCS]"
+										break;
+									case 6:
+										lgpdText+="[F]"
+										break;
+									case 7:
+										lgpdText+="[CP]"
+										break;
+									case 8:
+										lgpdText+="[CAD]"
+										break;
+									case 9:
+										lgpdText+="[I]"
+										break;
+									case 10:
+										lgpdText+="[SI]"
+										break;
+								}
+							}
+						}
+						newName = newName + " " + lgpdText;
+
+					ctrl.selectedElement.element.model.attributes.attrs.text.text = newName;
+					ctrl.selectedElement.element.update();
 				});
 				break;
 			case 'attribute.composed':
@@ -376,10 +556,10 @@ const controller = function (ModelAPI, $stateParams, $rootScope, $timeout, $uibM
 			base.attributes.composed = true;
 
 			const attr1 = ctrl.shapeFactory.createAttribute({ "position": { x: posX + 50, y: posY + 20 }});
-			attr1.setText("attr1");
+			attr1.attributes.attrs.text.text = "attr1";
 
 			const attr2 = ctrl.shapeFactory.createAttribute({ "position": { x: posX + 50, y: posY - 20 }});
-			attr2.setText("attr2");
+			attr2.attributes.attrs.text.text = "attr2";
 
 			configs.graph.addCells([base, attr1, attr2]);
 			ctrl.shapeLinker.createLink(base, attr1, configs.graph);
@@ -589,14 +769,7 @@ const controller = function (ModelAPI, $stateParams, $rootScope, $timeout, $uibM
 };
 
 export default angular
-	.module("app.workspace.conceptual", [
-		modelDuplicatorComponent,
-		preventExitServiceModule,
-		statusBar,
-		shareModelModal,
-		iconConceptual,
-		supportBannersList
-	])
+	.module("app.workspace.conceptual", [modelDuplicatorComponent, preventExitServiceModule, statusBar])
 	.component("editorConceptual", {
 		template,
 		controller,

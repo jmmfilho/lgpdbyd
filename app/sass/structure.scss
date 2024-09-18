@@ -106,24 +106,6 @@ a:hover,
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-// ..elements-holder support-banners-list
-////////////////////////////////////////////////////////////////////////////////
-
-// Hide by default
-.elements-holder support-banners-list {display: none;}
-
-// Only show if screen height is larger enough to show all items from
-// .elements-list in conceptual workspace (The one with more elements)
-@media screen and (min-height: 620px) {
-	.elements-holder support-banners-list {
-		display: block;
-		position: fixed;
-		bottom: 0;
-		z-index: 1;
-	}
-}
-
-////////////////////////////////////////////////////////////////////////////////
 // .stencil-paper-drag
 ////////////////////////////////////////////////////////////////////////////////
 .draggable-paper.dragging {
@@ -160,15 +142,7 @@ a:hover,
 ////////////////////////////////////////////////////////////////////////////////
 // .document-info
 ////////////////////////////////////////////////////////////////////////////////
-.document-info {
-	max-width: calc(100% - 300px);
-}
-
 .document-info h2 {
-	width: 100%;
-	overflow: hidden;
-	white-space: nowrap;
-	text-overflow: ellipsis;
 	margin-bottom: 4px;
 }
 
@@ -178,7 +152,7 @@ a:hover,
 .model-properties {
 	position: fixed;
 	z-index: 10;
-	top: 112px;
+	top: 109px;
 	right: -348px;
 	bottom: 0;
 	width: 360px;
