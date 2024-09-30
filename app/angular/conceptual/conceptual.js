@@ -256,11 +256,62 @@ const controller = function (ModelAPI, $stateParams, $rootScope, $timeout, $uibM
 					const newCardinality = event.value;
 					let currentText = ctrl.selectedElement.value.name;
 					const currentLgpd = ctrl.selectedElement.element.model.attributes.lgpd;
+					let tempLgpd = currentLgpd
+					let lgpdText = "";
+					for(let i = 2; i>=0; i--){
+						if(tempLgpd[i]){
+							switch(i){
+								case 2:
+									lgpdText+="[A]";
+									break;
+								case 1:
+									lgpdText+="[S]";
+									break;
+								case 0:
+									lgpdText+="[P]";
+									break;
+
+							}
+						break;
+						}
+					}
+					for(let j = 3; j < tempLgpd.length; j++){
+						if(tempLgpd[j]){
+							switch(j){
+								case 3:
+									lgpdText+="[C]";
+									break;
+								case 4:
+									lgpdText+="[CS]"
+									break;
+								case 5:
+									lgpdText+="[PCS]"
+									break;
+								case 6:
+									lgpdText+="[F]"
+									break;
+								case 7:
+									lgpdText+="[CP]"
+									break;
+								case 8:
+									lgpdText+="[CAD]"
+									break;
+								case 9:
+									lgpdText+="[I]"
+									break;
+								case 10:
+									lgpdText+="[SI]"
+									break;
+							}
+						}
+					}
+
+
 					if(newCardinality != '(1, 1)'){
 						currentText = currentText + " " + newCardinality;
 					}
 					if(currentLgpd != '[]' && currentLgpd != 'Nenhum'){
-						currentText = currentText + " " + currentLgpd;
+						currentText = currentText + " " + lgpdText;
 					}
 
 					ctrl.selectedElement.element.model.attributes.attrs.text.text = currentText;
