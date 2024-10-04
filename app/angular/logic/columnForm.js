@@ -25,6 +25,18 @@ const Controller = function () {
 			$ctrl.column.type = "INT";
 		}
 	}
+	$ctrl.checkLgpd = function (location){
+		let current = 2;
+		while (current >=0){
+			if(current>location && !$ctrl.column.lgpd[location]){
+				$ctrl.column.lgpd[current]=false;
+			}
+			if(current<location && $ctrl.column.lgpd[location]){
+				$ctrl.column.lgpd[current]=true;
+			}
+			current--;
+		}
+	}
 
 	$ctrl.selectTableOrigin = function (selected) {
 		$ctrl.column.tableOrigin.idName = selected.name;

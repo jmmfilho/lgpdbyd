@@ -277,13 +277,21 @@ const logicService = ($rootScope, ModelAPI, LogicFactory, LogicConversorService)
 		newTable.attributes.position.x = (table.position.x);
 		newTable.attributes.position.y = (table.position.y);
 		newTable.set('name', table.name);
-
+		if(table.titular!=null){
+			newTable.attributes.titular = table.titular
+			if(table.titular){
+				newTable.attributes.attrs[".uml-class-attrs-rect"]['stroke-dasharray']=5
+				newTable.attributes.attrs[".uml-class-methods-rect"]['stroke-dasharray']=5
+				newTable.attributes.attrs[".uml-class-name-rect"]['stroke-dasharray']=5
+				}
+		}
 		var columns = table.columns;
 
 		for (var j = 0; j < columns.length; j++) {
 			const column = new Column({
 				name: columns[j].name,
 				PK: columns[j].PK,
+				lgpd: columns[j].lgpd,
 			});
 			newTable.addAttribute(column);
 		}
@@ -382,12 +390,61 @@ const logicService = ($rootScope, ModelAPI, LogicFactory, LogicConversorService)
 	}
 
 	ls.editColumn = function (index, editedColumn) {
+		var tempLgpd = editedColumn.lgpd;
 
-		var name = editedColumn.name;
+		var name = editedColumn.name.split('[')[0];
 
 		if (editedColumn.PK) {
 			name = name + ": PK";
 		}
+		let lgpdText = " ";
+		for(let i = 2; i>=0; i--){
+			if(tempLgpd[i]){
+				switch(i){
+					case 2:
+						lgpdText+="[A]";
+						break;
+					case 1:
+						lgpdText+="[S]";
+						break;
+					case 0:
+						lgpdText+="[P]";
+					break;				
+				}
+			break;
+			}
+		}
+		for(let j = 3; j < tempLgpd.length; j++){
+			if(tempLgpd[j]){
+				switch(j){
+					case 3:
+						lgpdText+="[C]";
+						break;
+					case 4:
+						lgpdText+="[CS]"
+						break;
+					case 5:
+						lgpdText+="[PCS]"
+						break;
+					case 6:
+						lgpdText+="[F]"
+						break;
+					case 7:
+						lgpdText+="[CP]"
+						break;
+					case 8:
+						lgpdText+="[CAD]"
+						break;
+					case 9:
+						lgpdText+="[I]"
+						break;
+					case 10:
+						lgpdText+="[SI]"
+						break;
+				}
+			}
+		}
+		name = name + lgpdText
 		// ls.selectedElement.model.attributes.attributes[index] = name;
 		//  	ls.selectedElement.model.attributes.objects[index].name = name;
 
@@ -541,6 +598,7 @@ const logicService = ($rootScope, ModelAPI, LogicFactory, LogicConversorService)
 		elements.filter(isTable).forEach(element => {
 			var obj = {
 				name: element.attributes.name,
+				titular: element.attributes.titular,
 				columns: element.attributes.objects
 			}
 			map.set(element.id, obj);

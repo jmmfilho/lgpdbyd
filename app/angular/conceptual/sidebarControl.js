@@ -86,6 +86,19 @@ const controller = function($rootScope, $timeout) {
 			}
 		});
 	}
+	$ctrl.swapTitular = (value) => {
+		if(value) {
+			$ctrl.selectedElement.element.model.attributes.attrs[".outer"]['stroke-dasharray']=5
+		} else {
+			$ctrl.selectedElement.element.model.attributes.attrs[".outer"]['stroke-dasharray']=0
+		}
+		$ctrl.onUpdate({
+			"event": {
+				"type": "titular",
+				"value": value
+			}
+		});
+	}
 
 	$ctrl.editExtention = (selected) => {
 		$ctrl.onUpdate({
@@ -101,6 +114,15 @@ const controller = function($rootScope, $timeout) {
 			"event": {
 				"type": "link.cardinality",
 				"value": selected.type
+			}
+		});
+	}
+	$ctrl.updateLgpd = (value,num) => {
+		$ctrl.onUpdate({
+			"event": {
+				"type": "attribute.lgpd",
+				"value": value,
+				"lgpd": num
 			}
 		});
 	}
@@ -129,6 +151,24 @@ const controller = function($rootScope, $timeout) {
 			"event": {
 				"type": "attribute.cardinality",
 				"value": selected.type
+			}
+		});
+	}
+	$ctrl.updateAttributeLgpd = (value,num) => {
+		$ctrl.onUpdate({
+			"event": {
+				"type": "attribute.lgpd",
+				"value": value,
+				"lgpd": num
+			}
+		});
+	}
+	$ctrl.updateKeyLgpd = (value,num) => {
+		$ctrl.onUpdate({
+			"event": {
+				"type": "key.lgpd",
+				"value": value,
+				"lgpd": num
 			}
 		});
 	}
@@ -173,8 +213,9 @@ const controller = function($rootScope, $timeout) {
 		if (currentType === "Attribute") {
 			const attributes = selected.currentValue.element.model.attributes;
 			selected.currentValue.value = {
-				"name": attributes.attrs.text.text.replace(/ *\([^)]*\) */g, ""),
+				"name": attributes.attrs.text.text.replace(/ *(\(|\[)[^)]*(\)|\]) */g, ""),
 				"cardinality": attributes.cardinality,
+				"lgpd": attributes.lgpd,
 				"composed": attributes.composed
 			}
 		}

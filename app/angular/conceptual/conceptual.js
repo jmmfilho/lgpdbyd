@@ -242,6 +242,18 @@ const controller = function (ModelAPI, $stateParams, $rootScope, $timeout, $uibM
 					}
 				});
 				break;
+			case 'titular':
+					$timeout(() => {
+						const newValue = event.value;
+						const root = ctrl.selectedElement.element.model;
+						if(newValue) {
+							root.attributes.attrs['.outer']['stroke-dasharray']=5
+						} else {
+							root.attributes.attrs['.outer']['stroke-dasharray']=0
+						}
+						ctrl.selectedElement.element.update()
+					});
+				break;
 			case 'editExtention':
 				$timeout(() => {
 					ctrl.selectedElement.element.model.setText(event.value, ctrl.selectedElement.element);
@@ -289,24 +301,286 @@ const controller = function (ModelAPI, $stateParams, $rootScope, $timeout, $uibM
 				$timeout(() => {
 					const newCardinality = event.value;
 					let currentText = ctrl.selectedElement.value.name;
+					const currentLgpd = ctrl.selectedElement.element.model.attributes.lgpd;
+					let tempLgpd = currentLgpd
+					let lgpdText = "";
+					for(let i = 2; i>=0; i--){
+						if(tempLgpd[i]){
+							switch(i){
+								case 2:
+									lgpdText+="[A]";
+									break;
+								case 1:
+									lgpdText+="[S]";
+									break;
+								case 0:
+									lgpdText+="[P]";
+									break;
+
+							}
+						break;
+						}
+					}
+					for(let j = 3; j < tempLgpd.length; j++){
+						if(tempLgpd[j]){
+							switch(j){
+								case 3:
+									lgpdText+="[C]";
+									break;
+								case 4:
+									lgpdText+="[CS]"
+									break;
+								case 5:
+									lgpdText+="[PCS]"
+									break;
+								case 6:
+									lgpdText+="[F]"
+									break;
+								case 7:
+									lgpdText+="[CP]"
+									break;
+								case 8:
+									lgpdText+="[CAD]"
+									break;
+								case 9:
+									lgpdText+="[I]"
+									break;
+								case 10:
+									lgpdText+="[SI]"
+									break;
+							}
+						}
+					}
+
 
 					if(newCardinality != '(1, 1)'){
 						currentText = currentText + " " + newCardinality;
+					}
+					if(currentLgpd != '[]' && currentLgpd != 'Nenhum'){
+						currentText = currentText + " " + lgpdText;
 					}
 
 					ctrl.selectedElement.element.model.attributes.cardinality = newCardinality;
 					ctrl.selectedElement.element.model.setText(currentText, ctrl.selectedElement.element);
 				});
 				break;
+			case 'attribute.lgpd':
+					$timeout(() => {
+						const location = event.lgpd;
+						const newLgpd = event.value;
+						const currentLgpd = ctrl.selectedElement.value.lgpd;
+						let tempLgpd = currentLgpd;
+						tempLgpd[location]=newLgpd;
+						if(location<=2){
+							let current = 2;
+							while (current >=0){
+								if(current>location && !newLgpd){
+									tempLgpd[current]=false;
+								}
+								if(current<location && newLgpd){
+									tempLgpd[current]=true;
+								}
+								current--;
+							}
+						}
+
+
+						let currentText = ctrl.selectedElement.value.name;
+						const currentCardinality = ctrl.selectedElement.element.model.attributes.cardinality;
+						if(currentCardinality != '(1, 1)'){
+							currentText = currentText + " " + currentCardinality;
+						}
+						let lgpdText = "";
+						for(let i = 2; i>=0; i--){
+							if(tempLgpd[i]){
+								switch(i){
+									case 2:
+										lgpdText+="[A]";
+										break;
+									case 1:
+										lgpdText+="[S]";
+										break;
+									case 0:
+										lgpdText+="[P]";
+										break;
+
+								}
+							break;
+							}
+						}
+						for(let j = 3; j < tempLgpd.length; j++){
+							if(tempLgpd[j]){
+								switch(j){
+									case 3:
+										lgpdText+="[C]";
+										break;
+									case 4:
+										lgpdText+="[CS]"
+										break;
+									case 5:
+										lgpdText+="[PCS]"
+										break;
+									case 6:
+										lgpdText+="[F]"
+										break;
+									case 7:
+										lgpdText+="[CP]"
+										break;
+									case 8:
+										lgpdText+="[CAD]"
+										break;
+									case 9:
+										lgpdText+="[I]"
+										break;
+									case 10:
+										lgpdText+="[SI]"
+										break;
+								}
+							}
+						}
+						currentText = currentText + " " + lgpdText;
+
+						ctrl.selectedElement.element.model.attributes.attrs.text.text = currentText;
+						ctrl.selectedElement.element.model.attributes.lgpd = tempLgpd;
+						ctrl.selectedElement.element.update();
+					});
+					break;
+					case 'key.lgpd':
+						$timeout(() => {
+							const location = event.lgpd;
+							const newLgpd = event.value;
+							const currentLgpd = ctrl.selectedElement.element.model.attributes.lgpd;
+							let tempLgpd = currentLgpd;
+							tempLgpd[location]=newLgpd;
+							if(location<=2){
+								let current = 2;
+								while (current >=0){
+									if(current>location && !newLgpd){
+										tempLgpd[current]=false;
+									}
+									if(current<location && newLgpd){
+										tempLgpd[current]=true;
+									}
+									current--;
+								}
+							}
+
+
+							let currentText = ctrl.selectedElement.element.model.attributes.attrs.text.text.replace(/ *(\(|\[)[^)]*(\)|\]) */g, "");
+							let lgpdText = "";
+							for(let i = 2; i>=0; i--){
+								if(tempLgpd[i]){
+									switch(i){
+										case 2:
+											lgpdText+="[A]";
+											break;
+										case 1:
+											lgpdText+="[S]";
+											break;
+										case 0:
+											lgpdText+="[P]";
+											break;
+
+									}
+								break;
+								}
+							}
+							for(let j = 3; j < tempLgpd.length; j++){
+								if(tempLgpd[j]){
+									switch(j){
+										case 3:
+											lgpdText+="[C]";
+											break;
+										case 4:
+											lgpdText+="[CS]"
+											break;
+										case 5:
+											lgpdText+="[PCS]"
+											break;
+										case 6:
+											lgpdText+="[F]"
+											break;
+										case 7:
+											lgpdText+="[CP]"
+											break;
+										case 8:
+											lgpdText+="[CAD]"
+											break;
+										case 9:
+											lgpdText+="[I]"
+											break;
+										case 10:
+											lgpdText+="[SI]"
+											break;
+									}
+								}
+							}
+							currentText = currentText + " " + lgpdText;
+
+							ctrl.selectedElement.element.model.attributes.attrs.text.text = currentText;
+							ctrl.selectedElement.element.model.attributes.lgpd = tempLgpd;
+							ctrl.selectedElement.element.model.setText(currentText, ctrl.selectedElement.element);
+						});
+						break;
 			case 'attribute.name':
 				$timeout(() => {
 					let newName = event.value;
 					const currentCardinality = ctrl.selectedElement.value.cardinality;
-
+					const currentLgpd = ctrl.selectedElement.value.lgpd;
+					let tempLgpd = currentLgpd;
 					if(currentCardinality != '(1, 1)'){
 						newName = newName + " " + currentCardinality;
 					}
 
+					let lgpdText = "";
+						for(let i = 2; i>=0; i--){
+							if(tempLgpd[i]){
+								switch(i){
+									case 2:
+										lgpdText+="[A]";
+										break;
+									case 1:
+										lgpdText+="[S]";
+										break;
+									case 0:
+										lgpdText+="[P]";
+										break;
+
+								}
+							break;
+							}
+						}
+						for(let j = 3; j < tempLgpd.length; j++){
+							if(tempLgpd[j]){
+								switch(j){
+									case 3:
+										lgpdText+="[C]";
+										break;
+									case 4:
+										lgpdText+="[CS]"
+										break;
+									case 5:
+										lgpdText+="[PCS]"
+										break;
+									case 6:
+										lgpdText+="[F]"
+										break;
+									case 7:
+										lgpdText+="[CP]"
+										break;
+									case 8:
+										lgpdText+="[CAD]"
+										break;
+									case 9:
+										lgpdText+="[I]"
+										break;
+									case 10:
+										lgpdText+="[SI]"
+										break;
+								}
+							}
+						}
+						newName = newName + " " + lgpdText;
 					ctrl.selectedElement.element.model.setText(newName, ctrl.selectedElement.element);
 				});
 				break;

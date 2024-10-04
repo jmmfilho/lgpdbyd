@@ -102,6 +102,8 @@ const sqlGeneratorService = () => {
 		const hasCheckConstraint = table.columns.some(column => column.checkConstraint);
 		const hasUniqueConstraint = table.columns.some(column => column.UNIQUE);
 		let checkConstraint = '';
+		let lgpdText = '/* , */\n'
+		let lgpdN = 1
 		table.columns.forEach((column, index) => {
 			var alreadyCreated = createdMap.get(key);
 
@@ -113,6 +115,61 @@ const sqlGeneratorService = () => {
 
 			if (column.defaultValue) {
 				create += ` DEFAULT '${column.defaultValue}'`
+			}
+			if(column.lgpd.some(value => value === true)){
+				let lista = []
+				for(let i = 2; i>=0; i--){
+					if(column.lgpd[i]){
+						switch(i){
+							case 2:
+								lista.push("Anonimizado");
+								break;
+							case 1:
+								lista.push("Sensivel");
+								break;
+							case 0:
+								lista.push("Pessoal");
+							break;
+						}
+					break;
+					}
+				}
+				for(let j = 3; j < column.lgpd.length; j++){
+					if(column.lgpd[j]){
+						switch(j){
+							case 3:
+								lista.push("Criptografado");
+								break;
+							case 4:
+								lista.push("Consentimento");
+								break;
+							case 5:
+								lista.push("Periodo de Consentimento")
+								break;
+							case 6:
+								lista.push("Finalidade")
+								break;
+							case 7:
+								lista.push("Compartilhado")
+								break;
+							case 8:
+								lista.push("Crianca/Adolescente")
+								break;
+							case 9:
+								lista.push("identificador")
+								break;
+							case 10:
+								lista.push("Semi-identificador")
+								break;
+						}
+					}
+				}
+				let tempText = ' '
+				for(let i = 0; i<lista.length; i++){
+					tempText+=lista[i]+' '
+				}
+				lgpdText += '/* CONSTRAINT c'+lgpdN+' '+tempText+column.name.split('[')[0]+', */\n'
+				lgpdN+=1
 			}
 			create += ", " + " \n";
 
@@ -130,14 +187,21 @@ const sqlGeneratorService = () => {
 		if (hasUniqueConstraint) {
 			create += ` UNIQUE (${table.columns.filter(column => column.UNIQUE).map(({ name }) => `${name}`)})` + "\n";
 		}
-
-		create += "); \n\n"
+		if(lgpdN!=1){
+			create+=lgpdText
+		}
+		create+= ")"
+		if(table?.titular){
+			create += " COMMENT 'Titular'"
+		}
+		create += "; \n\n"
 		return create;
 	}
 
 	const cleanString = function(name){
 		var newName = name.replace(": PK", "");
 		newName = newName.replace(": FK", "");
+		newName = newName.split('[')[0];
 		return newName;
 	}
 
