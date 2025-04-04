@@ -38,7 +38,7 @@ uml.Class = joint.shapes.basic.Generic.extend({
                 'fill': 'black', 'font-size': 12, 'font-family': 'BlinkMacSystemFont,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif'
             }
         },
-        titular: false,
+        owner: false,
         name: [],
         attributes: [],
         methods: [],
@@ -90,27 +90,18 @@ uml.Class = joint.shapes.basic.Generic.extend({
 			if(obj.lgpd[j]){
 				switch(j){
 					case 3:
-						lgpdText+="[C]";
+						lgpdText+="[En]";
 						break;
 					case 4:
-						lgpdText+="[CS]"
+						lgpdText+="[Sh]"
 						break;
 					case 5:
-						lgpdText+="[PCS]"
+						lgpdText+="[ChA]"
 						break;
 					case 6:
-						lgpdText+="[F]"
-						break;
-					case 7:
-						lgpdText+="[CP]"
-						break;
-					case 8:
-						lgpdText+="[CAD]"
-						break;
-					case 9:
 						lgpdText+="[I]"
 						break;
-					case 10:
+					case 7:
 						lgpdText+="[SI]"
 						break;
 				}

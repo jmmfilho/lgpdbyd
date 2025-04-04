@@ -86,7 +86,7 @@ const controller = function($rootScope, $timeout) {
 			}
 		});
 	}
-	$ctrl.swapTitular = (value) => {
+	$ctrl.swapOwner = (value) => {
 		if(value) {
 			$ctrl.selectedElement.element.model.attributes.attrs[".outer"]['stroke-dasharray']=5
 		} else {
@@ -94,7 +94,7 @@ const controller = function($rootScope, $timeout) {
 		}
 		$ctrl.onUpdate({
 			"event": {
-				"type": "titular",
+				"type": "owner",
 				"value": value
 			}
 		});

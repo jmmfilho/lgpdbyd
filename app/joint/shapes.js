@@ -22,7 +22,7 @@ erd.Entity = joint.dia.Element.extend({
 			type: "erd.Entity",
 			supertype: "Entity",
 			isExtended: false,
-			titular: false,
+			owner: false,
 			autorelationship: false,
 			size: { width: 80, height: 40 },
 			attrs: {
@@ -192,7 +192,7 @@ erd.Attribute = joint.dia.Element.extend({
       type: "erd.Attribute",
       supertype: "Attribute",
       cardinality: "(1, 1)",
-      lgpd: [false,false,false,false,false,false,false,false,false,false,false],
+      lgpd: [false,false,false,false,false,false,false,false],
       multivalued: false,
       composed: false,
       size: {
@@ -247,7 +247,7 @@ erd.Key = joint.dia.Element.extend({
       type: "erd.Key",
       supertype: "Key",
       cardinality: "(1, 1)",
-      lgpd: [false,false,false,false,false,false,false,false,false,false,false],
+      lgpd: [false,false,false,false,false,false,false,false],
       multivalued: false,
       composed: false,
       size: {

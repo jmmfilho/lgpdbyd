@@ -277,9 +277,9 @@ const logicService = ($rootScope, ModelAPI, LogicFactory, LogicConversorService)
 		newTable.attributes.position.x = (table.position.x);
 		newTable.attributes.position.y = (table.position.y);
 		newTable.set('name', table.name);
-		if(table.titular!=null){
-			newTable.attributes.titular = table.titular
-			if(table.titular){
+		if(table.owner!=null){
+			newTable.attributes.owner = table.owner
+			if(table.owner){
 				newTable.attributes.attrs[".uml-class-attrs-rect"]['stroke-dasharray']=5
 				newTable.attributes.attrs[".uml-class-methods-rect"]['stroke-dasharray']=5
 				newTable.attributes.attrs[".uml-class-name-rect"]['stroke-dasharray']=5
@@ -418,27 +418,18 @@ const logicService = ($rootScope, ModelAPI, LogicFactory, LogicConversorService)
 			if(tempLgpd[j]){
 				switch(j){
 					case 3:
-						lgpdText+="[C]";
+						lgpdText+="[En]";
 						break;
 					case 4:
-						lgpdText+="[CS]"
+						lgpdText+="[Sh]"
 						break;
 					case 5:
-						lgpdText+="[PCS]"
+						lgpdText+="[ChA]"
 						break;
 					case 6:
-						lgpdText+="[F]"
-						break;
-					case 7:
-						lgpdText+="[CP]"
-						break;
-					case 8:
-						lgpdText+="[CAD]"
-						break;
-					case 9:
 						lgpdText+="[I]"
 						break;
-					case 10:
+					case 7:
 						lgpdText+="[SI]"
 						break;
 				}
@@ -598,7 +589,7 @@ const logicService = ($rootScope, ModelAPI, LogicFactory, LogicConversorService)
 		elements.filter(isTable).forEach(element => {
 			var obj = {
 				name: element.attributes.name,
-				titular: element.attributes.titular,
+				owner: element.attributes.owner,
 				columns: element.attributes.objects
 			}
 			map.set(element.id, obj);

@@ -242,7 +242,7 @@ const controller = function (ModelAPI, $stateParams, $rootScope, $timeout, $uibM
 					}
 				});
 				break;
-			case 'titular':
+			case 'owner':
 					$timeout(() => {
 						const newValue = event.value;
 						const root = ctrl.selectedElement.element.model;
@@ -315,8 +315,7 @@ const controller = function (ModelAPI, $stateParams, $rootScope, $timeout, $uibM
 									break;
 								case 0:
 									lgpdText+="[P]";
-									break;
-
+								break;				
 							}
 						break;
 						}
@@ -325,27 +324,18 @@ const controller = function (ModelAPI, $stateParams, $rootScope, $timeout, $uibM
 						if(tempLgpd[j]){
 							switch(j){
 								case 3:
-									lgpdText+="[C]";
+									lgpdText+="[En]";
 									break;
 								case 4:
-									lgpdText+="[CS]"
+									lgpdText+="[Sh]"
 									break;
 								case 5:
-									lgpdText+="[PCS]"
+									lgpdText+="[ChA]"
 									break;
 								case 6:
-									lgpdText+="[F]"
-									break;
-								case 7:
-									lgpdText+="[CP]"
-									break;
-								case 8:
-									lgpdText+="[CAD]"
-									break;
-								case 9:
 									lgpdText+="[I]"
 									break;
-								case 10:
+								case 7:
 									lgpdText+="[SI]"
 									break;
 							}
@@ -402,8 +392,7 @@ const controller = function (ModelAPI, $stateParams, $rootScope, $timeout, $uibM
 										break;
 									case 0:
 										lgpdText+="[P]";
-										break;
-
+									break;				
 								}
 							break;
 							}
@@ -412,27 +401,18 @@ const controller = function (ModelAPI, $stateParams, $rootScope, $timeout, $uibM
 							if(tempLgpd[j]){
 								switch(j){
 									case 3:
-										lgpdText+="[C]";
+										lgpdText+="[En]";
 										break;
 									case 4:
-										lgpdText+="[CS]"
+										lgpdText+="[Sh]"
 										break;
 									case 5:
-										lgpdText+="[PCS]"
+										lgpdText+="[ChA]"
 										break;
 									case 6:
-										lgpdText+="[F]"
-										break;
-									case 7:
-										lgpdText+="[CP]"
-										break;
-									case 8:
-										lgpdText+="[CAD]"
-										break;
-									case 9:
 										lgpdText+="[I]"
 										break;
-									case 10:
+									case 7:
 										lgpdText+="[SI]"
 										break;
 								}
@@ -479,8 +459,7 @@ const controller = function (ModelAPI, $stateParams, $rootScope, $timeout, $uibM
 											break;
 										case 0:
 											lgpdText+="[P]";
-											break;
-
+										break;				
 									}
 								break;
 								}
@@ -489,27 +468,18 @@ const controller = function (ModelAPI, $stateParams, $rootScope, $timeout, $uibM
 								if(tempLgpd[j]){
 									switch(j){
 										case 3:
-											lgpdText+="[C]";
+											lgpdText+="[En]";
 											break;
 										case 4:
-											lgpdText+="[CS]"
+											lgpdText+="[Sh]"
 											break;
 										case 5:
-											lgpdText+="[PCS]"
+											lgpdText+="[ChA]"
 											break;
 										case 6:
-											lgpdText+="[F]"
-											break;
-										case 7:
-											lgpdText+="[CP]"
-											break;
-										case 8:
-											lgpdText+="[CAD]"
-											break;
-										case 9:
 											lgpdText+="[I]"
 											break;
-										case 10:
+										case 7:
 											lgpdText+="[SI]"
 											break;
 									}
@@ -533,53 +503,43 @@ const controller = function (ModelAPI, $stateParams, $rootScope, $timeout, $uibM
 					}
 
 					let lgpdText = "";
-						for(let i = 2; i>=0; i--){
-							if(tempLgpd[i]){
-								switch(i){
-									case 2:
-										lgpdText+="[A]";
-										break;
-									case 1:
-										lgpdText+="[S]";
-										break;
-									case 0:
-										lgpdText+="[P]";
-										break;
-
-								}
-							break;
+					for(let i = 2; i>=0; i--){
+						if(tempLgpd[i]){
+							switch(i){
+								case 2:
+									lgpdText+="[A]";
+									break;
+								case 1:
+									lgpdText+="[S]";
+									break;
+								case 0:
+									lgpdText+="[P]";
+								break;				
+							}
+						break;
+						}
+					}
+					for(let j = 3; j < tempLgpd.length; j++){
+						if(tempLgpd[j]){
+							switch(j){
+								case 3:
+									lgpdText+="[En]";
+									break;
+								case 4:
+									lgpdText+="[Sh]"
+									break;
+								case 5:
+									lgpdText+="[ChA]"
+									break;
+								case 6:
+									lgpdText+="[I]"
+									break;
+								case 7:
+									lgpdText+="[SI]"
+									break;
 							}
 						}
-						for(let j = 3; j < tempLgpd.length; j++){
-							if(tempLgpd[j]){
-								switch(j){
-									case 3:
-										lgpdText+="[C]";
-										break;
-									case 4:
-										lgpdText+="[CS]"
-										break;
-									case 5:
-										lgpdText+="[PCS]"
-										break;
-									case 6:
-										lgpdText+="[F]"
-										break;
-									case 7:
-										lgpdText+="[CP]"
-										break;
-									case 8:
-										lgpdText+="[CAD]"
-										break;
-									case 9:
-										lgpdText+="[I]"
-										break;
-									case 10:
-										lgpdText+="[SI]"
-										break;
-								}
-							}
-						}
+					}
 						newName = newName + " " + lgpdText;
 					ctrl.selectedElement.element.model.setText(newName, ctrl.selectedElement.element);
 				});

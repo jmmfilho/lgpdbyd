@@ -20,7 +20,7 @@ const Controller = function (LogicService, $rootScope, $timeout) {
 		});
 	});
 
-	$ctrl.swapTitular = (value) => {
+	$ctrl.swapOwner = (value) => {
 		if(value) {
 			$ctrl.selectedElement.attributes.attrs[".uml-class-attrs-rect"]['stroke-dasharray']=5
 			$ctrl.selectedElement.attributes.attrs[".uml-class-methods-rect"]['stroke-dasharray']=5

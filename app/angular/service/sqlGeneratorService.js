@@ -122,13 +122,13 @@ const sqlGeneratorService = () => {
 					if(column.lgpd[i]){
 						switch(i){
 							case 2:
-								lista.push("Anonimizado");
+								lista.push("Anonymized");
 								break;
 							case 1:
-								lista.push("Sensivel");
+								lista.push("Sensitive");
 								break;
 							case 0:
-								lista.push("Pessoal");
+								lista.push("Personal");
 							break;
 						}
 					break;
@@ -138,28 +138,19 @@ const sqlGeneratorService = () => {
 					if(column.lgpd[j]){
 						switch(j){
 							case 3:
-								lista.push("Criptografado");
+								lista.push("Encrypted");
 								break;
 							case 4:
-								lista.push("Consentimento");
+								lista.push("Shared");
 								break;
 							case 5:
-								lista.push("Periodo de Consentimento")
+								lista.push("Child and Adolescent")
 								break;
 							case 6:
-								lista.push("Finalidade")
+								lista.push("Identifier")
 								break;
 							case 7:
-								lista.push("Compartilhado")
-								break;
-							case 8:
-								lista.push("Crianca/Adolescente")
-								break;
-							case 9:
-								lista.push("identificador")
-								break;
-							case 10:
-								lista.push("Semi-identificador")
+								lista.push("Semi-Identifier")
 								break;
 						}
 					}
@@ -191,8 +182,8 @@ const sqlGeneratorService = () => {
 			create+=lgpdText
 		}
 		create+= ")"
-		if(table?.titular){
-			create += " COMMENT 'Titular'"
+		if(table?.owner){
+			create += " COMMENT 'Owner'"
 		}
 		create += "; \n\n"
 		return create;
