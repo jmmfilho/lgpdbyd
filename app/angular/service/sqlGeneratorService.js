@@ -1,5 +1,6 @@
 import angular from "angular";
 import { comparasionOperators } from "./queryExpressionService";
+const consentLogic = require('../service/consentLogic');
 
 const REGEX_TABLE_COLUMN_NAME = /^(?<table>[^.]+)\.(?<column>[^.]+)$/;
 
@@ -36,6 +37,8 @@ const sqlGeneratorService = () => {
 		views.forEach(view => {
 			sql += createViewScript(view);
 		});
+
+		sql+= consentLogic.allConsentText();
 
 		return sql;
 	}
