@@ -289,3 +289,258 @@ a:hover,
 .page-header {
 	border-color: var(--border-default);
 }
+:root {
+  --roxo: #79358d;
+  --verde: #348c72;
+  --cinza-claro: rgba(0, 0, 0, 0.5);
+}
+
+/* === Container === */
+.propositos-container {
+  font-family: sans-serif;
+  padding: 24px;
+}
+
+/* === SWITCH === */
+.switch-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 20px;
+}
+
+.switch-wrapper span {
+  font-weight: bold;
+  color: black;
+  transition: color 0.3s;
+  font-size: 14px;
+}
+
+.active-label.design-color {
+  color: var(--roxo);
+}
+
+.active-label.code-color {
+  color: var(--verde);
+}
+
+.custom-switch {
+  width: 40px;
+  height: 20px;
+  border: 2px solid;
+  border-radius: 5px;
+  display: flex;
+  align-items: center;
+  padding: 1px;
+  position: relative;
+  cursor: pointer;
+  transition: border-color 0.3s;
+}
+
+.custom-switch.design-mode {
+  border-color: var(--roxo);
+}
+
+.custom-switch.code-mode {
+  border-color: var(--verde);
+}
+
+.switch-indicator {
+  width: 14px;
+  height: 14px;
+  border-radius: 3px;
+  position: absolute;
+  transition: left 0.3s, right 0.3s, background-color 0.3s;
+}
+
+.switch-indicator.left {
+  left: 3px;
+  background-color: var(--roxo);
+}
+
+.switch-indicator.right {
+  right: 3px;
+  background-color: var(--verde);
+}
+
+/* === Código === */
+.code-view pre {
+  background: #f9f9f9;
+  padding: 16px;
+  border-radius: 12px;
+  overflow-x: auto;
+  border: 1px solid #ddd;
+}
+
+/* === Lista de Propósitos === */
+.purpose-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.purpose-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+.purpose-card {
+  background: white;
+  padding: 6px 12px;
+  border-radius: 12px;
+  font-size: 14px;
+  max-width: 80%;
+  flex: 1;
+}
+
+/* === Botões === */
+.add-purpose-btn {
+  background: none;
+  border: none;
+  color: var(--roxo);
+  font-weight: bold;
+  font-size: 16px;
+  margin-top: 16px;
+  cursor: pointer;
+}
+
+.delete-btn {
+  background: white;
+  border: none;
+  border-radius: 50%;
+  font-weight: bold;
+  width: 26px;
+  height: 26px;
+  font-size: 16px;
+  line-height: 24px;
+  color: #333;
+  cursor: pointer;
+}
+
+/* === Popup do Formulário === */
+.popup-overlay {
+  position: fixed;
+  top: 0;
+  right: 0;
+  left: 0;
+  height: 100%;
+  background: var(--cinza-claro);
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  z-index: 999;
+}
+
+.popup-form {
+  background: white;
+  padding: 24px;
+  border-radius: 16px;
+  width: 320px;
+  margin-right: 15%;
+  box-shadow: 0 0 10px rgba(0,0,0,0.2);
+}
+
+.popup-title {
+  margin-top: 0;
+  margin-bottom: 16px;
+  color: var(--roxo);
+}
+
+/* === Inputs com label flutuante === */
+.form-group {
+  margin-bottom: 20px;
+  position: relative;
+}
+
+.floating-label {
+  position: absolute;
+  top: -10px;
+  left: 12px;
+  background: white;
+  font-size: 12px;
+  padding: 0 4px;
+  color: var(--roxo);
+}
+
+.form-input {
+  width: 100%;
+  padding: 10px 12px;
+  border: 2px solid var(--roxo);
+  border-radius: 10px;
+  font-size: 14px;
+  outline: none;
+  box-sizing: border-box;
+}
+
+/* === Botões do formulário === */
+.form-buttons {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+}
+
+.cancel-btn {
+  background: none;
+  border: none;
+  color: var(--roxo);
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.create-btn {
+  background: var(--roxo);
+  border: none;
+  color: white;
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+
+//CONSENTIMENTO
+
+
+.checkbox-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-top: 8px;
+  padding-left: 4px;
+  font-size: 14px;
+}
+
+.checkbox-group input[type="checkbox"] {
+  margin-right: 6px;
+}
+
+/* Grid de 2 colunas para checkboxes */
+.checkbox-group {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin-top: 8px;
+  padding-left: 4px;
+  font-size: 14px;
+}
+
+/* Personaliza checkbox para ter check roxo */
+.checkbox-group input[type="checkbox"] {
+  accent-color: #79358d; /* Checkmark roxo */
+}
+
+/* Layout em grid para checkbox de consentimentos */
+.checkbox-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+/* Grupo para adicionar usuário */
+.user-add-group {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}

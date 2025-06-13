@@ -27,205 +27,253 @@
 		<!-- Conteúdo variável -->
 		<div class="form-group">
 			<!-- Aba 1 -->
-			<div ng-if="$ctrl.abaSelecionada === 'propositos'">
-				<label>
-				  <input type="checkbox" ng-model="$ctrl.visualizarCodigo" />
-				  {{ $ctrl.visualizarCodigo ? 'Design' : 'Code' }}
-				</label>
-			  
-				<!-- Código bruto -->
-				<div ng-if="$ctrl.visualizarCodigo">
-					<pre>{{ $ctrl.codigoPurposes }}</pre>
+			<div ng-if="$ctrl.abaSelecionada === 'propositos'" class="propositos-container">
+			<!-- SWITCH -->
+			<div class="switch-wrapper">
+				<span ng-class="{ 'active-label': !$ctrl.visualizarCodigo, 'design-color': true }">Design</span>
+				
+				<div class="custom-switch"
+					ng-class="{ 'design-mode': !$ctrl.visualizarCodigo, 'code-mode': $ctrl.visualizarCodigo }"
+					ng-click="$ctrl.visualizarCodigo = !$ctrl.visualizarCodigo">
+				<div class="switch-indicator"
+					ng-class="{ 'left': !$ctrl.visualizarCodigo, 'right': $ctrl.visualizarCodigo }"></div>
 				</div>
-			  
-				<!-- Visual design -->
-				<div ng-if="!$ctrl.visualizarCodigo">
-				  <ul>
-					<li ng-repeat="p in $ctrl.propositos track by $index">
-					  <strong>{{ p.name }}</strong>
-					  <span ng-if="p.parent"> (parent: {{ p.parent }}) </span>
-					  <span ng-if="p.comment"> — {{ p.comment }} </span>
-					  <button ng-click="$ctrl.excluirProposito(p.name)">Delete</button>
-					</li>
-				  </ul>
-			  
-				  <button ng-click="$ctrl.mostrarFormulario = true">Add Purpose</button>
-			  
-				  <div ng-if="$ctrl.mostrarFormulario">
-					<h4>New Purpose</h4>
-			  
-					<label>Name:
-					  <input type="text" ng-model="$ctrl.novoProposito.name" required />
-					</label>
-					<br>
-			  
-					<label>Parent:
-					  <select ng-model="$ctrl.novoProposito.parent" ng-options="p.name as p.name for p in $ctrl.propositos">
+
+				<span ng-class="{ 'active-label': $ctrl.visualizarCodigo, 'code-color': true }">Code</span>
+			</div>
+
+			<!-- Código bruto -->
+			<div ng-if="$ctrl.visualizarCodigo" class="code-view">
+				<pre>{{ $ctrl.codigoPurposes }}</pre>
+			</div>
+
+			<!-- Visual design -->
+			<div ng-if="!$ctrl.visualizarCodigo" class="design-view">
+				<ul class="purpose-list">
+				<li ng-repeat="p in $ctrl.propositos track by $index" class="purpose-item">
+					<div class="purpose-card">
+					<strong>{{ p.name }}</strong>
+					<span ng-if="p.parent"> (parent: {{ p.parent }}) </span>
+					<span ng-if="p.comment"> — {{ p.comment }} </span>
+					</div>
+					<button ng-click="$ctrl.excluirProposito(p.name)" class="delete-btn">-</button>
+				</li>
+				</ul>
+
+				<!-- Botão fora do formulário -->
+				<button ng-click="$ctrl.mostrarFormulario = true" class="add-purpose-btn">+ New Purpose</button>
+
+				<!-- FORMULÁRIO -->
+				<div ng-if="$ctrl.mostrarFormulario" class="popup-overlay">
+				<div class="popup-form">
+					<h4 class="popup-title">New Purpose</h4>
+
+					<div class="form-group">
+					<label class="floating-label">Name</label>
+					<input type="text" ng-model="$ctrl.novoProposito.name" required class="form-input" />
+					</div>
+
+					<div class="form-group">
+					<label class="floating-label">Parent</label>
+					<select ng-model="$ctrl.novoProposito.parent" ng-options="p.name as p.name for p in $ctrl.propositos" class="form-input">
 						<option value="">-- None --</option>
-					  </select>
-					</label>
-					<br>
-			  
-					<label>Comment:
-					  <input type="text" ng-model="$ctrl.novoProposito.comment" />
-					</label>
-					<br>
-			  
-					<button ng-click="$ctrl.confirmarNovoProposito()">Create Purpose</button>
-					<button ng-click="$ctrl.cancelarNovoProposito()">Cancel</button>
-				  </div>
+					</select>
+					</div>
+
+					<div class="form-group">
+					<input type="text" ng-model="$ctrl.novoProposito.comment" class="form-input" placeholder="Comment" />
+					</div>
+
+					<div class="form-buttons">
+					<button ng-click="$ctrl.cancelarNovoProposito()" class="cancel-btn">Cancel</button>
+					<button ng-click="$ctrl.confirmarNovoProposito()" class="create-btn">+ Create Purpose</button>
+					</div>
 				</div>
-			  </div>
+				</div>
+			</div>
+			</div>
 	
 			<!-- Aba 2 -->
-			<div ng-if="$ctrl.abaSelecionada === 'consentimentos'">
-				<label>
-				  <input type="checkbox" ng-model="$ctrl.visualizarCodigoConsentimentos" />
-				  {{ $ctrl.visualizarCodigoConsentimentos ? 'Design' : 'Code' }}
-				</label>
-			  
-				<!-- Código bruto -->
-				<div ng-if="$ctrl.visualizarCodigoConsentimentos">
-				  <pre>{{ $ctrl.codigoConsentimentos }}</pre>
+			<div ng-if="$ctrl.abaSelecionada === 'consentimentos'" class="propositos-container">
+			<!-- SWITCH -->
+			<div class="switch-wrapper">
+				<span ng-class="{ 'active-label': !$ctrl.visualizarCodigoConsentimentos, 'design-color': true }">Design</span>
+				
+				<div class="custom-switch"
+					ng-class="{ 'design-mode': !$ctrl.visualizarCodigoConsentimentos, 'code-mode': $ctrl.visualizarCodigoConsentimentos }"
+					ng-click="$ctrl.visualizarCodigoConsentimentos = !$ctrl.visualizarCodigoConsentimentos">
+				<div class="switch-indicator"
+					ng-class="{ 'left': !$ctrl.visualizarCodigoConsentimentos, 'right': $ctrl.visualizarCodigoConsentimentos }"></div>
 				</div>
-			  
-				<!-- Visual design -->
-				<div ng-if="!$ctrl.visualizarCodigoConsentimentos">
-					<ul>
-						<li ng-repeat="c in $ctrl.consentimentos track by $index">
-						  {{ c.nome }}
-						  <button ng-click="$ctrl.removerConsentimento(c.nome)">Delete</button>
-						</li>
-					  </ul>
-			  
-				  <button ng-click="$ctrl.mostrarFormularioConsentimento = true">Add Consent Policy</button>
-			  
-				  <div ng-if="$ctrl.mostrarFormularioConsentimento">
-					<h4>New Consent Policy</h4>
-					<label for="nomeConsentimento">Name:</label>
-						<input id="nomeConsentimento" type="text" ng-model="$ctrl.novoConsentimento.nome">
-						<br><br>
+
+				<span ng-class="{ 'active-label': $ctrl.visualizarCodigoConsentimentos, 'code-color': true }">Code</span>
+			</div>
+
+			<!-- Código bruto -->
+			<div ng-if="$ctrl.visualizarCodigoConsentimentos" class="code-view">
+				<pre>{{ $ctrl.codigoConsentimentos }}</pre>
+			</div>
+
+			<!-- Visual design -->
+			<div ng-if="!$ctrl.visualizarCodigoConsentimentos" class="design-view">
+				<ul class="purpose-list">
+				<li ng-repeat="c in $ctrl.consentimentos track by $index" class="purpose-item">
+					<div class="purpose-card">{{ c.nome }}</div>
+					<button ng-click="$ctrl.removerConsentimento(c.nome)" class="delete-btn">-</button>
+				</li>
+				</ul>
+
+				<!-- Botão fora do formulário -->
+				<button ng-click="$ctrl.mostrarFormularioConsentimento = true" class="add-purpose-btn">+ Add Consent Policy</button>
+
+				<!-- FORMULÁRIO -->
+				<div ng-if="$ctrl.mostrarFormularioConsentimento" class="popup-overlay">
+				<div class="popup-form">
+					<h4 class="popup-title">New Consent Policy</h4>
+
+					<div class="form-group">
+					<label class="floating-label">Name</label>
+					<input id="nomeConsentimento" type="text" ng-model="$ctrl.novoConsentimento.nome" class="form-input" />
+					</div>
+
 					<!-- Tipo -->
-					<label>Type:
-					  <select ng-model="$ctrl.novoConsentimento.tipo">
+					<div class="form-group">
+					<label class="floating-label">Type</label>
+					<select ng-model="$ctrl.novoConsentimento.tipo" class="form-input">
 						<option value="allow">Allow</option>
 						<option value="deny">Deny</option>
-					  </select>
-					</label>
-					<br>
-			  
-					<!-- Propósitos (seleção de múltiplos propósitos já existentes) -->
-					<label>Purposes:</label>
-						<div ng-repeat="p in $ctrl.propositos">
-						<label>
-							<input 
+					</select>
+					</div>
+
+					<!-- Propósitos -->
+					<div class="form-group">
+					<label class="floating-label">Purposes</label>
+					<div class="checkbox-group">
+						<label ng-repeat="p in $ctrl.propositos">
+						<input 
 							type="checkbox"
 							ng-checked="$ctrl.novoConsentimento.propositos.includes(p.name)"
 							ng-click="$ctrl.togglePropositoConsentimento(p.name)">
-							{{ p.name }}
+						{{ p.name }}
 						</label>
 					</div>
-			  
+					</div>
+
 					<!-- Tabela -->
-					<label>Table:
-					  <select ng-model="$ctrl.novoConsentimento.tabela" 
-							  ng-options="tabela.name as tabela.name for tabela in $ctrl.tabelasDisponiveis">
+					<div class="form-group">
+					<label class="floating-label">Table</label>
+					<select ng-model="$ctrl.novoConsentimento.tabela" 
+							ng-options="tabela.name as tabela.name for tabela in $ctrl.tabelasDisponiveis"
+							class="form-input">
 						<option value="">-- None --</option>
-					  </select>
-					</label>
-					<br>
-			  
-					<!-- Colunas -->
-					<div ng-if="$ctrl.novoConsentimento.tabela">
-					  <label>Column:</label>
-					  <div ng-repeat="coluna in $ctrl.getColunas($ctrl.novoConsentimento.tabela)">
-						<label>
-						  <input type="checkbox" ng-checked="$ctrl.novoConsentimento.colunas.indexOf(coluna) !== -1"
-								 ng-click="$ctrl.toggleColunaConsentimento(coluna)">
-						  {{ coluna }}
-						</label>
-					  </div>
+					</select>
 					</div>
-					<br>
-			  
+
+					<!-- Colunas -->
+					<div class="form-group" ng-if="$ctrl.novoConsentimento.tabela">
+					<label class="floating-label">Columns</label>
+					<div class="checkbox-group">
+						<label ng-repeat="coluna in $ctrl.getColunas($ctrl.novoConsentimento.tabela)">
+						<input type="checkbox"
+								ng-checked="$ctrl.novoConsentimento.colunas.indexOf(coluna) !== -1"
+								ng-click="$ctrl.toggleColunaConsentimento(coluna)">
+						{{ coluna }}
+						</label>
+					</div>
+					</div>
+
 					<!-- Condição -->
-					<label>requirement:
-					  <input type="text" ng-model="$ctrl.novoConsentimento.condicao" />
-					</label>
-					<br>
-			  
-					<button ng-click="$ctrl.confirmarNovoConsentimento()">Create Consent Policy</button>
-					<button ng-click="$ctrl.cancelarNovoConsentimento()">Cancel</button>
-				  </div>
+					<div class="form-group">
+					<input type="text" ng-model="$ctrl.novoConsentimento.condicao" class="form-input" placeholder="Requirement" />
+					</div>
+
+					<div class="form-buttons">
+					<button ng-click="$ctrl.cancelarNovoConsentimento()" class="cancel-btn">Cancel</button>
+					<button ng-click="$ctrl.confirmarNovoConsentimento()" class="create-btn">+ Create Consent Policy</button>
+					</div>
 				</div>
-			  </div>
+				</div>
+			</div>
+			</div>
 	
 			<!-- Aba 3 -->
-			<div ng-if="$ctrl.abaSelecionada === 'cargos'">
-				<label>
-				  <input type="checkbox" ng-model="$ctrl.visualizarCodigoCargos" />
-				  {{ $ctrl.visualizarCodigoCargos ? 'Design' : 'Code' }}
-				</label>
-			  
-				<!-- Código bruto -->
-				<div ng-if="$ctrl.visualizarCodigoCargos">
-				  <pre>{{ $ctrl.codigoCargos }}</pre>
+			<div ng-if="$ctrl.abaSelecionada === 'cargos'" class="propositos-container">
+			<!-- SWITCH -->
+			<div class="switch-wrapper">
+				<span ng-class="{ 'active-label': !$ctrl.visualizarCodigoCargos, 'design-color': true }">Design</span>
+
+				<div class="custom-switch"
+				ng-click="$ctrl.visualizarCodigoCargos = !$ctrl.visualizarCodigoCargos"
+				ng-class="{ 'design-mode': !$ctrl.visualizarCodigoCargos, 'code-mode': $ctrl.visualizarCodigoCargos }">
+				<div class="switch-indicator"
+					ng-class="{ 'left': !$ctrl.visualizarCodigoCargos, 'right': $ctrl.visualizarCodigoCargos }">
 				</div>
-			  
-				<!-- Visual design -->
-				<div ng-if="!$ctrl.visualizarCodigoCargos">
-				  <ul>
-					<li ng-repeat="cargo in $ctrl.cargos track by $index">
-					  {{ cargo.nome }}
-					  <button ng-click="$ctrl.removerCargo(cargo.nome)">Delete</button>
-					</li>
-				  </ul>
-			  
-				  <button ng-click="$ctrl.mostrarFormularioCargo = true">Add Role</button>
-			  
-				  <div ng-if="$ctrl.mostrarFormularioCargo">
-					<h4>New ROle</h4>
-			  
-					<label>Name:</label>
-					<input type="text" ng-model="$ctrl.novoCargo.nome" />
-					<br><br>
-			  
-					<label>Consent Policies:</label>
-					<div ng-repeat="c in $ctrl.consentimentos">
-					  <label>
+				</div>
+
+				<span ng-class="{ 'active-label': $ctrl.visualizarCodigoCargos, 'code-color': true }">Code</span>
+			</div>
+
+			<!-- Código bruto -->
+			<div ng-if="$ctrl.visualizarCodigoCargos" class="code-view">
+				<pre>{{ $ctrl.codigoCargos }}</pre>
+			</div>
+
+			<!-- Visual design -->
+			<div ng-if="!$ctrl.visualizarCodigoCargos" class="design-view">
+				<ul class="purpose-list">
+				<li ng-repeat="cargo in $ctrl.cargos track by $index" class="purpose-item">
+					<div class="purpose-card">{{ cargo.nome }}</div>
+					<button ng-click="$ctrl.removerCargo(cargo.nome)" class="delete-btn">-</button>
+				</li>
+				</ul>
+
+				<button ng-click="$ctrl.mostrarFormularioCargo = true" class="add-purpose-btn">+ Add Role</button>
+
+				<div ng-if="$ctrl.mostrarFormularioCargo" class="popup-overlay">
+				<div class="popup-form">
+					<h4 class="popup-title">New Role</h4>
+
+					<div class="form-group">
+					<label class="floating-label">Name</label>
+					<input type="text" ng-model="$ctrl.novoCargo.nome" class="form-input" />
+					</div>
+
+					<div class="form-group">
+					<label class="floating-label">Consent Policies</label>
+					<div class="checkbox-group">
+						<label ng-repeat="c in $ctrl.consentimentos">
 						<input
-						  type="checkbox"
-						  ng-checked="$ctrl.novoCargo.consentimentos.includes(c.nome)"
-						  ng-click="$ctrl.toggleConsentimentoCargo(c.nome)"
-						/>
+							type="checkbox"
+							ng-checked="$ctrl.novoCargo.consentimentos.includes(c.nome)"
+							ng-click="$ctrl.toggleConsentimentoCargo(c.nome)" />
 						{{ c.nome }}
-					  </label>
+						</label>
 					</div>
-			  
-					<label>Users:</label>
-					<div>
-					  <input
-						type="text"
-						ng-model="$ctrl.usuarioTemporario"
-						placeholder="Nome do usuário"
-					  />
-					  <button ng-click="$ctrl.adicionarUsuarioAoCargo()">Add User</button>
 					</div>
-			  
-					<ul>
-					  <li ng-repeat="usuario in $ctrl.novoCargo.usuarios track by $index">
-						{{ usuario }}
-						<button ng-click="$ctrl.removerUsuarioDoCargo($index)">Remove User</button>
-					  </li>
+
+					<div class="form-group">
+					<label class="floating-label">Users</label>
+					<div class="checkbox-group">
+						<input type="text" ng-model="$ctrl.usuarioTemporario" placeholder="User name" class="form-input" />
+						<button ng-click="$ctrl.adicionarUsuarioAoCargo()" class="create-btn">Add User</button>
+					</div>
+					</div>
+
+					<ul class="purpose-list">
+					<li ng-repeat="usuario in $ctrl.novoCargo.usuarios track by $index" class="purpose-item">
+						<div class="purpose-card">{{ usuario }}</div>
+						<button class="delete-btn" ng-click="$ctrl.removerUsuarioDoCargo($index)">-</button>
+					</li>
 					</ul>
-			  
-					<br />
-			  
-					<button ng-click="$ctrl.confirmarNovoCargo()">Create Role</button>
-					<button ng-click="$ctrl.cancelarNovoCargo()">Cancel</button>
-				  </div>
+
+					<div class="form-buttons">
+					<button ng-click="$ctrl.cancelarNovoCargo()" class="cancel-btn">Cancel</button>
+					<button ng-click="$ctrl.confirmarNovoCargo()" class="create-btn">+ Create Role</button>
+					</div>
 				</div>
-			  </div>
+				</div>
+			</div>
+			</div>
 	
 			<!-- Estado vazio (nenhuma aba selecionada) -->
 			<div class="empty-state" ng-if="!$ctrl.abaSelecionada">
