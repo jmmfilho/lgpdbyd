@@ -38,7 +38,7 @@ uml.Class = joint.shapes.basic.Generic.extend({
                 'fill': 'black', 'font-size': 12, 'font-family': 'BlinkMacSystemFont,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif'
             }
         },
-        owner: false,
+        titular: false,
         name: [],
         attributes: [],
         methods: [],
@@ -69,44 +69,44 @@ uml.Class = joint.shapes.basic.Generic.extend({
         if (obj.FK) {
             obj.name = obj.name + ": FK";
         }
-	let lgpdText = " "
-        for(let i = 2; i>=0; i--){
-			if(obj.lgpd[i]){
-				switch(i){
-					case 2:
-						lgpdText+="[A]";
-						break;
-					case 1:
-						lgpdText+="[S]";
-						break;
-					case 0:
-						lgpdText+="[P]";
-					break;				
-				}
-			break;
-			}
-		}
-		for(let j = 3; j < obj.lgpd.length; j++){
-			if(obj.lgpd[j]){
-				switch(j){
-					case 3:
-						lgpdText+="[En]";
-						break;
-					case 4:
-						lgpdText+="[Sh]"
-						break;
-					case 5:
-						lgpdText+="[ChA]"
-						break;
-					case 6:
-						lgpdText+="[I]"
-						break;
-					case 7:
-						lgpdText+="[SI]"
-						break;
-				}
-			}
-		}
+        let lgpdText = " "
+        for (let i = 2; i >= 0; i--) {
+            if (obj.lgpd[i]) {
+                switch (i) {
+                    case 2:
+                        lgpdText += "[A]";
+                        break;
+                    case 1:
+                        lgpdText += "[S]";
+                        break;
+                    case 0:
+                        lgpdText += "[P]";
+                        break;
+                }
+                break;
+            }
+        }
+        for (let j = 3; j < obj.lgpd.length; j++) {
+            if (obj.lgpd[j]) {
+                switch (j) {
+                    case 3:
+                        lgpdText += "[En]";
+                        break;
+                    case 4:
+                        lgpdText += "[Sh]"
+                        break;
+                    case 5:
+                        lgpdText += "[ChA]"
+                        break;
+                    case 6:
+                        lgpdText += "[I]"
+                        break;
+                    case 7:
+                        lgpdText += "[SI]"
+                        break;
+                }
+            }
+        }
         obj.name = obj.name + lgpdText;
         this.get('attributes').push(obj.name);
         this.get('objects').push(obj);
@@ -152,7 +152,7 @@ uml.Class = joint.shapes.basic.Generic.extend({
         });
     },
 
-    getType: function() {
+    getType: function () {
         return "Class"
     }
 
@@ -256,41 +256,41 @@ uml.Abstract = joint.shapes.basic.Generic.extend({
         });
     },
 
-    getType: function() {
+    getType: function () {
         return "View"
     }
 
 });
 
-const updateSize = function() {
-	const nameBox = this.$el.find(".uml-class-name-text")[0].getBBox();
-	const columnsBox = this.$el.find(".uml-class-attrs-text")[0].getBBox();
+const updateSize = function () {
+    const nameBox = this.$el.find(".uml-class-name-text")[0].getBBox();
+    const columnsBox = this.$el.find(".uml-class-attrs-text")[0].getBBox();
 
-	let elementWidth = Math.max(nameBox.width, columnsBox.width);
+    let elementWidth = Math.max(nameBox.width, columnsBox.width);
 
-	if(elementWidth > 100) {
-		this.model.attributes.size.width = elementWidth + 10;
-		this.resize();
-	}
+    if (elementWidth > 100) {
+        this.model.attributes.size.width = elementWidth + 10;
+        this.resize();
+    }
 
-	if (columnsBox.height > 80) {
-		this.model.attributes.size.height = columnsBox.height + 40;
-		this.resize();
-	}
+    if (columnsBox.height > 80) {
+        this.model.attributes.size.height = columnsBox.height + 40;
+        this.resize();
+    }
 }
 
 uml.ClassView = joint.dia.ElementView.extend({
     initialize: function () {
         joint.dia.ElementView.prototype.initialize.apply(this, arguments);
     },
-	updateSize: updateSize
+    updateSize: updateSize
 });
 
 uml.AbstractView = joint.dia.ElementView.extend({
     initialize: function () {
         joint.dia.ElementView.prototype.initialize.apply(this, arguments);
     },
-	updateSize: updateSize
+    updateSize: updateSize
 });
 
 export default uml;

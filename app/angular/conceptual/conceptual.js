@@ -26,7 +26,7 @@ import EntityExtensor from "./entityExtensor";
 import KeyboardController, { types } from "../components/keyboardController";
 import ToolsViewService from "../service/toolsViewService";
 import preventExitServiceModule from "../service/preventExitService";
-import iconConceptual from  "../components/icons/conceptual";
+import iconConceptual from "../components/icons/conceptual";
 import supportBannersList from "../components/supportBannersList";
 
 const controller = function (ModelAPI, $stateParams, $rootScope, $timeout, $uibModal, $state, $transitions, preventExitService, $filter) {
@@ -145,7 +145,7 @@ const controller = function (ModelAPI, $stateParams, $rootScope, $timeout, $uibM
 						user-id=$ctrl.userId
 						model-id=$ctrl.modelId>
 					</duplicate-model-modal>`,
-			controller: function() {
+			controller: function () {
 				const $ctrl = this;
 				$ctrl.suggestedName = $filter('translate')("MODEL_NAME (copy)", { name: model.name });
 				$ctrl.modelId = model._id;
@@ -180,7 +180,7 @@ const controller = function (ModelAPI, $stateParams, $rootScope, $timeout, $uibM
 			backdrop: 'static',
 			keyboard: false,
 			template: '<share-model-modal close="$close(result)" dismiss="$dismiss()" model-id="$ctrl.modelId"></share-model-modal>',
-			controller: function() {
+			controller: function () {
 				const $ctrl = this;
 				$ctrl.modelId = model._id;
 			},
@@ -196,7 +196,7 @@ const controller = function (ModelAPI, $stateParams, $rootScope, $timeout, $uibM
 	ctrl.unselectAll = () => {
 		ctrl.showFeedback(false, "");
 		ctrl.onSelectElement(null);
-		if(configs.selectedElementActions != null) {
+		if (configs.selectedElementActions != null) {
 			configs.selectedElementActions.remove();
 			configs.selectedElementActions = null;
 		}
@@ -242,17 +242,17 @@ const controller = function (ModelAPI, $stateParams, $rootScope, $timeout, $uibM
 					}
 				});
 				break;
-			case 'owner':
-					$timeout(() => {
-						const newValue = event.value;
-						const root = ctrl.selectedElement.element.model;
-						if(newValue) {
-							root.attributes.attrs['.outer']['stroke-dasharray']=5
-						} else {
-							root.attributes.attrs['.outer']['stroke-dasharray']=0
-						}
-						ctrl.selectedElement.element.update()
-					});
+			case 'titular':
+				$timeout(() => {
+					const newValue = event.value;
+					const root = ctrl.selectedElement.element.model;
+					if (newValue) {
+						root.attributes.attrs['.outer']['stroke-dasharray'] = 5
+					} else {
+						root.attributes.attrs['.outer']['stroke-dasharray'] = 0
+					}
+					ctrl.selectedElement.element.update()
+				});
 				break;
 			case 'editExtention':
 				$timeout(() => {
@@ -304,49 +304,49 @@ const controller = function (ModelAPI, $stateParams, $rootScope, $timeout, $uibM
 					const currentLgpd = ctrl.selectedElement.element.model.attributes.lgpd;
 					let tempLgpd = currentLgpd
 					let lgpdText = "";
-					for(let i = 2; i>=0; i--){
-						if(tempLgpd[i]){
-							switch(i){
+					for (let i = 2; i >= 0; i--) {
+						if (tempLgpd[i]) {
+							switch (i) {
 								case 2:
-									lgpdText+="[A]";
+									lgpdText += "[A]";
 									break;
 								case 1:
-									lgpdText+="[S]";
+									lgpdText += "[S]";
 									break;
 								case 0:
-									lgpdText+="[P]";
-								break;				
+									lgpdText += "[P]";
+									break;
 							}
-						break;
+							break;
 						}
 					}
-					for(let j = 3; j < tempLgpd.length; j++){
-						if(tempLgpd[j]){
-							switch(j){
+					for (let j = 3; j < tempLgpd.length; j++) {
+						if (tempLgpd[j]) {
+							switch (j) {
 								case 3:
-									lgpdText+="[En]";
+									lgpdText += "[En]";
 									break;
 								case 4:
-									lgpdText+="[Sh]"
+									lgpdText += "[Sh]"
 									break;
 								case 5:
-									lgpdText+="[ChA]"
+									lgpdText += "[ChA]"
 									break;
 								case 6:
-									lgpdText+="[I]"
+									lgpdText += "[I]"
 									break;
 								case 7:
-									lgpdText+="[SI]"
+									lgpdText += "[SI]"
 									break;
 							}
 						}
 					}
 
 
-					if(newCardinality != '(1, 1)'){
+					if (newCardinality != '(1, 1)') {
 						currentText = currentText + " " + newCardinality;
 					}
-					if(currentLgpd != '[]' && currentLgpd != 'Nenhum'){
+					if (currentLgpd != '[]' && currentLgpd != 'Nenhum') {
 						currentText = currentText + " " + lgpdText;
 					}
 
@@ -355,192 +355,192 @@ const controller = function (ModelAPI, $stateParams, $rootScope, $timeout, $uibM
 				});
 				break;
 			case 'attribute.lgpd':
-					$timeout(() => {
-						const location = event.lgpd;
-						const newLgpd = event.value;
-						const currentLgpd = ctrl.selectedElement.value.lgpd;
-						let tempLgpd = currentLgpd;
-						tempLgpd[location]=newLgpd;
-						if(location<=2){
-							let current = 2;
-							while (current >=0){
-								if(current>location && !newLgpd){
-									tempLgpd[current]=false;
-								}
-								if(current<location && newLgpd){
-									tempLgpd[current]=true;
-								}
-								current--;
+				$timeout(() => {
+					const location = event.lgpd;
+					const newLgpd = event.value;
+					const currentLgpd = ctrl.selectedElement.value.lgpd;
+					let tempLgpd = currentLgpd;
+					tempLgpd[location] = newLgpd;
+					if (location <= 2) {
+						let current = 2;
+						while (current >= 0) {
+							if (current > location && !newLgpd) {
+								tempLgpd[current] = false;
 							}
+							if (current < location && newLgpd) {
+								tempLgpd[current] = true;
+							}
+							current--;
 						}
+					}
 
 
-						let currentText = ctrl.selectedElement.value.name;
-						const currentCardinality = ctrl.selectedElement.element.model.attributes.cardinality;
-						if(currentCardinality != '(1, 1)'){
-							currentText = currentText + " " + currentCardinality;
-						}
-						let lgpdText = "";
-						for(let i = 2; i>=0; i--){
-							if(tempLgpd[i]){
-								switch(i){
-									case 2:
-										lgpdText+="[A]";
-										break;
-									case 1:
-										lgpdText+="[S]";
-										break;
-									case 0:
-										lgpdText+="[P]";
-									break;				
-								}
+					let currentText = ctrl.selectedElement.value.name;
+					const currentCardinality = ctrl.selectedElement.element.model.attributes.cardinality;
+					if (currentCardinality != '(1, 1)') {
+						currentText = currentText + " " + currentCardinality;
+					}
+					let lgpdText = "";
+					for (let i = 2; i >= 0; i--) {
+						if (tempLgpd[i]) {
+							switch (i) {
+								case 2:
+									lgpdText += "[A]";
+									break;
+								case 1:
+									lgpdText += "[S]";
+									break;
+								case 0:
+									lgpdText += "[P]";
+									break;
+							}
 							break;
+						}
+					}
+					for (let j = 3; j < tempLgpd.length; j++) {
+						if (tempLgpd[j]) {
+							switch (j) {
+								case 3:
+									lgpdText += "[En]";
+									break;
+								case 4:
+									lgpdText += "[Sh]"
+									break;
+								case 5:
+									lgpdText += "[ChA]"
+									break;
+								case 6:
+									lgpdText += "[I]"
+									break;
+								case 7:
+									lgpdText += "[SI]"
+									break;
 							}
 						}
-						for(let j = 3; j < tempLgpd.length; j++){
-							if(tempLgpd[j]){
-								switch(j){
-									case 3:
-										lgpdText+="[En]";
-										break;
-									case 4:
-										lgpdText+="[Sh]"
-										break;
-									case 5:
-										lgpdText+="[ChA]"
-										break;
-									case 6:
-										lgpdText+="[I]"
-										break;
-									case 7:
-										lgpdText+="[SI]"
-										break;
-								}
+					}
+					currentText = currentText + " " + lgpdText;
+
+					ctrl.selectedElement.element.model.attributes.attrs.text.text = currentText;
+					ctrl.selectedElement.element.model.attributes.lgpd = tempLgpd;
+					ctrl.selectedElement.element.update();
+				});
+				break;
+			case 'key.lgpd':
+				$timeout(() => {
+					const location = event.lgpd;
+					const newLgpd = event.value;
+					const currentLgpd = ctrl.selectedElement.element.model.attributes.lgpd;
+					let tempLgpd = currentLgpd;
+					tempLgpd[location] = newLgpd;
+					if (location <= 2) {
+						let current = 2;
+						while (current >= 0) {
+							if (current > location && !newLgpd) {
+								tempLgpd[current] = false;
+							}
+							if (current < location && newLgpd) {
+								tempLgpd[current] = true;
+							}
+							current--;
+						}
+					}
+
+
+					let currentText = ctrl.selectedElement.element.model.attributes.attrs.text.text.replace(/ *(\(|\[)[^)]*(\)|\]) */g, "");
+					let lgpdText = "";
+					for (let i = 2; i >= 0; i--) {
+						if (tempLgpd[i]) {
+							switch (i) {
+								case 2:
+									lgpdText += "[A]";
+									break;
+								case 1:
+									lgpdText += "[S]";
+									break;
+								case 0:
+									lgpdText += "[P]";
+									break;
+							}
+							break;
+						}
+					}
+					for (let j = 3; j < tempLgpd.length; j++) {
+						if (tempLgpd[j]) {
+							switch (j) {
+								case 3:
+									lgpdText += "[En]";
+									break;
+								case 4:
+									lgpdText += "[Sh]"
+									break;
+								case 5:
+									lgpdText += "[ChA]"
+									break;
+								case 6:
+									lgpdText += "[I]"
+									break;
+								case 7:
+									lgpdText += "[SI]"
+									break;
 							}
 						}
-						currentText = currentText + " " + lgpdText;
+					}
+					currentText = currentText + " " + lgpdText;
 
-						ctrl.selectedElement.element.model.attributes.attrs.text.text = currentText;
-						ctrl.selectedElement.element.model.attributes.lgpd = tempLgpd;
-						ctrl.selectedElement.element.update();
-					});
-					break;
-					case 'key.lgpd':
-						$timeout(() => {
-							const location = event.lgpd;
-							const newLgpd = event.value;
-							const currentLgpd = ctrl.selectedElement.element.model.attributes.lgpd;
-							let tempLgpd = currentLgpd;
-							tempLgpd[location]=newLgpd;
-							if(location<=2){
-								let current = 2;
-								while (current >=0){
-									if(current>location && !newLgpd){
-										tempLgpd[current]=false;
-									}
-									if(current<location && newLgpd){
-										tempLgpd[current]=true;
-									}
-									current--;
-								}
-							}
-
-
-							let currentText = ctrl.selectedElement.element.model.attributes.attrs.text.text.replace(/ *(\(|\[)[^)]*(\)|\]) */g, "");
-							let lgpdText = "";
-							for(let i = 2; i>=0; i--){
-								if(tempLgpd[i]){
-									switch(i){
-										case 2:
-											lgpdText+="[A]";
-											break;
-										case 1:
-											lgpdText+="[S]";
-											break;
-										case 0:
-											lgpdText+="[P]";
-										break;				
-									}
-								break;
-								}
-							}
-							for(let j = 3; j < tempLgpd.length; j++){
-								if(tempLgpd[j]){
-									switch(j){
-										case 3:
-											lgpdText+="[En]";
-											break;
-										case 4:
-											lgpdText+="[Sh]"
-											break;
-										case 5:
-											lgpdText+="[ChA]"
-											break;
-										case 6:
-											lgpdText+="[I]"
-											break;
-										case 7:
-											lgpdText+="[SI]"
-											break;
-									}
-								}
-							}
-							currentText = currentText + " " + lgpdText;
-
-							ctrl.selectedElement.element.model.attributes.attrs.text.text = currentText;
-							ctrl.selectedElement.element.model.attributes.lgpd = tempLgpd;
-							ctrl.selectedElement.element.model.setText(currentText, ctrl.selectedElement.element);
-						});
-						break;
+					ctrl.selectedElement.element.model.attributes.attrs.text.text = currentText;
+					ctrl.selectedElement.element.model.attributes.lgpd = tempLgpd;
+					ctrl.selectedElement.element.model.setText(currentText, ctrl.selectedElement.element);
+				});
+				break;
 			case 'attribute.name':
 				$timeout(() => {
 					let newName = event.value;
 					const currentCardinality = ctrl.selectedElement.value.cardinality;
 					const currentLgpd = ctrl.selectedElement.value.lgpd;
 					let tempLgpd = currentLgpd;
-					if(currentCardinality != '(1, 1)'){
+					if (currentCardinality != '(1, 1)') {
 						newName = newName + " " + currentCardinality;
 					}
 
 					let lgpdText = "";
-					for(let i = 2; i>=0; i--){
-						if(tempLgpd[i]){
-							switch(i){
+					for (let i = 2; i >= 0; i--) {
+						if (tempLgpd[i]) {
+							switch (i) {
 								case 2:
-									lgpdText+="[A]";
+									lgpdText += "[A]";
 									break;
 								case 1:
-									lgpdText+="[S]";
+									lgpdText += "[S]";
 									break;
 								case 0:
-									lgpdText+="[P]";
-								break;				
+									lgpdText += "[P]";
+									break;
 							}
-						break;
+							break;
 						}
 					}
-					for(let j = 3; j < tempLgpd.length; j++){
-						if(tempLgpd[j]){
-							switch(j){
+					for (let j = 3; j < tempLgpd.length; j++) {
+						if (tempLgpd[j]) {
+							switch (j) {
 								case 3:
-									lgpdText+="[En]";
+									lgpdText += "[En]";
 									break;
 								case 4:
-									lgpdText+="[Sh]"
+									lgpdText += "[Sh]"
 									break;
 								case 5:
-									lgpdText+="[ChA]"
+									lgpdText += "[ChA]"
 									break;
 								case 6:
-									lgpdText+="[I]"
+									lgpdText += "[I]"
 									break;
 								case 7:
-									lgpdText+="[SI]"
+									lgpdText += "[SI]"
 									break;
 							}
 						}
 					}
-						newName = newName + " " + lgpdText;
+					newName = newName + " " + lgpdText;
 					ctrl.selectedElement.element.model.setText(newName, ctrl.selectedElement.element);
 				});
 				break;
@@ -548,21 +548,21 @@ const controller = function (ModelAPI, $stateParams, $rootScope, $timeout, $uibM
 				$timeout(() => {
 					const newValue = event.value;
 					const root = ctrl.selectedElement.element.model;
-					if(newValue) {
-							const rootX = root.attributes.position.x;
-							const rootY = root.attributes.position.y;
+					if (newValue) {
+						const rootX = root.attributes.position.x;
+						const rootY = root.attributes.position.y;
 
-							const attr1 = ctrl.shapeFactory.createAttribute({ "position": { x: rootX + 50, y: rootY + 20 }});
-							attr1.attributes.attrs.text.text = "attr1";
+						const attr1 = ctrl.shapeFactory.createAttribute({ "position": { x: rootX + 50, y: rootY + 20 } });
+						attr1.attributes.attrs.text.text = "attr1";
 
-							configs.graph.addCell(attr1);
-							ctrl.shapeLinker.createLink(root, attr1, configs.graph);
+						configs.graph.addCell(attr1);
+						ctrl.shapeLinker.createLink(root, attr1, configs.graph);
 
-							const attr2 = ctrl.shapeFactory.createAttribute({ "position": { x: rootX + 50, y: rootY - 20 }});
-							attr2.attributes.attrs.text.text = "attr2";
+						const attr2 = ctrl.shapeFactory.createAttribute({ "position": { x: rootX + 50, y: rootY - 20 } });
+						attr2.attributes.attrs.text.text = "attr2";
 
-							configs.graph.addCell(attr2);
-							ctrl.shapeLinker.createLink(root, attr2, configs.graph);
+						configs.graph.addCell(attr2);
+						ctrl.shapeLinker.createLink(root, attr2, configs.graph);
 					} else {
 						configs.graph.getNeighbors(root)
 							.filter(neighbor => ctrl.shapeValidator.isAttribute(neighbor))
@@ -573,10 +573,10 @@ const controller = function (ModelAPI, $stateParams, $rootScope, $timeout, $uibM
 			case 'relationship.associative':
 				$timeout(() => {
 					const relationship = ctrl.selectedElement.element.model;
-					if(relationship.attributes.parent == null){
+					if (relationship.attributes.parent == null) {
 						const posX = relationship.attributes.position.x;
 						const posY = relationship.attributes.position.y;
-						const block = ctrl.shapeFactory.createBlockAssociative({ "position": { x: posX - 6, y: posY - 2 }});
+						const block = ctrl.shapeFactory.createBlockAssociative({ "position": { x: posX - 6, y: posY - 2 } });
 
 						configs.graph.addCell(block);
 
@@ -591,8 +591,8 @@ const controller = function (ModelAPI, $stateParams, $rootScope, $timeout, $uibM
 	ctrl.makeAssociative = (model) => {
 		const posX = model.attributes.position.x;
 		const posY = model.attributes.position.y;
-		const block = ctrl.shapeFactory.createBlockAssociative({ "position": { x: posX, y: posY }});
-		const auto = ctrl.shapeFactory.createRelationship({ position: { x: posX + 6, y: posY + 2 }});
+		const block = ctrl.shapeFactory.createBlockAssociative({ "position": { x: posX, y: posY } });
+		const auto = ctrl.shapeFactory.createRelationship({ position: { x: posX + 6, y: posY + 2 } });
 
 		block.embed(auto);
 		configs.graph.addCells([block, auto]);
@@ -606,13 +606,13 @@ const controller = function (ModelAPI, $stateParams, $rootScope, $timeout, $uibM
 		$timeout(() => {
 			const posX = model.attributes.position.x;
 			const posY = model.attributes.position.y;
-			const base = ctrl.shapeFactory.createAttribute({ "position": { x: posX, y: posY }});
+			const base = ctrl.shapeFactory.createAttribute({ "position": { x: posX, y: posY } });
 			base.attributes.composed = true;
 
-			const attr1 = ctrl.shapeFactory.createAttribute({ "position": { x: posX + 50, y: posY + 20 }});
+			const attr1 = ctrl.shapeFactory.createAttribute({ "position": { x: posX + 50, y: posY + 20 } });
 			attr1.setText("attr1");
 
-			const attr2 = ctrl.shapeFactory.createAttribute({ "position": { x: posX + 50, y: posY - 20 }});
+			const attr2 = ctrl.shapeFactory.createAttribute({ "position": { x: posX + 50, y: posY - 20 } });
 			attr2.setText("attr2");
 
 			configs.graph.addCells([base, attr1, attr2]);
@@ -625,7 +625,7 @@ const controller = function (ModelAPI, $stateParams, $rootScope, $timeout, $uibM
 	const registerPaperEvents = (paper) => {
 		paper.on('blank:pointerdown', (evt) => {
 			ctrl.unselectAll();
-			if(!configs.keyboardController.spacePressed){
+			if (!configs.keyboardController.spacePressed) {
 				configs.elementSelector.start(evt);
 			} else {
 				configs.editorScroller.startPanning(evt);
@@ -682,7 +682,7 @@ const controller = function (ModelAPI, $stateParams, $rootScope, $timeout, $uibM
 		configs.keyboardController.registerHandler(types.ESC, () => ctrl.unselectAll());
 		configs.keyboardController.registerHandler(types.COPY, () => configs.elementSelector.copyAll());
 		configs.keyboardController.registerHandler(types.PASTE, () => configs.elementSelector.pasteAll());
-		configs.keyboardController.registerHandler(types.DELETE, () => configs.elementSelector.deleteAll() );
+		configs.keyboardController.registerHandler(types.DELETE, () => configs.elementSelector.deleteAll());
 	}
 
 	const registerGraphEvents = (graph) => {
@@ -704,8 +704,8 @@ const controller = function (ModelAPI, $stateParams, $rootScope, $timeout, $uibM
 				parentBbox.containsPoint(cellBbox.topRight()) &&
 				parentBbox.containsPoint(cellBbox.corner()) &&
 				parentBbox.containsPoint(cellBbox.bottomLeft())) {
-					return;
-				}
+				return;
+			}
 			cell.set('position', cell.previous('position'));
 		});
 
@@ -713,11 +713,11 @@ const controller = function (ModelAPI, $stateParams, $rootScope, $timeout, $uibM
 			setIsDirty(true);
 			if (model instanceof joint.dia.Link) return;
 
-			if(ctrl.shapeValidator.isAssociative(model)) {
+			if (ctrl.shapeValidator.isAssociative(model)) {
 				ctrl.makeAssociative(model);
 			}
 
-			if(ctrl.shapeValidator.isComposedAttribute(model)) {
+			if (ctrl.shapeValidator.isComposedAttribute(model)) {
 				ctrl.makeComposedAttribute(model);
 			}
 		});
@@ -797,7 +797,7 @@ const controller = function (ModelAPI, $stateParams, $rootScope, $timeout, $uibM
 			ctrl.modelState.updatedAt = resp.data.updated
 			ctrl.setLoading(false);
 		}).catch((error) => {
-			if(error.status == 404 || error.status == 401) {
+			if (error.status == 404 || error.status == 401) {
 				$state.go("noaccess");
 			}
 		});

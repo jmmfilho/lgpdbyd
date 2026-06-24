@@ -23,23 +23,23 @@ const Controller = function (LogicService, $rootScope, $timeout) {
 		});
 	});
 
-	$ctrl.selecionarAba = function(aba) {
+	$ctrl.selecionarAba = function (aba) {
 		if ($ctrl.abaSelecionada === aba) {
-		  $ctrl.abaSelecionada = null; // Desseleciona se já estiver ativa
+			$ctrl.abaSelecionada = null; // Desseleciona se já estiver ativa
 		} else {
-		  $ctrl.abaSelecionada = aba;
+			$ctrl.abaSelecionada = aba;
 		}
-	  };
+	};
 
-	$ctrl.swapOwner = (value) => {
-		if(value) {
-			$ctrl.selectedElement.attributes.attrs[".uml-class-attrs-rect"]['stroke-dasharray']=5
-			$ctrl.selectedElement.attributes.attrs[".uml-class-methods-rect"]['stroke-dasharray']=5
-			$ctrl.selectedElement.attributes.attrs[".uml-class-name-rect"]['stroke-dasharray']=5
+	$ctrl.swapTitular = (value) => {
+		if (value) {
+			$ctrl.selectedElement.attributes.attrs[".uml-class-attrs-rect"]['stroke-dasharray'] = 5
+			$ctrl.selectedElement.attributes.attrs[".uml-class-methods-rect"]['stroke-dasharray'] = 5
+			$ctrl.selectedElement.attributes.attrs[".uml-class-name-rect"]['stroke-dasharray'] = 5
 		} else {
-			$ctrl.selectedElement.attributes.attrs[".uml-class-attrs-rect"]['stroke-dasharray']=0
-			$ctrl.selectedElement.attributes.attrs[".uml-class-methods-rect"]['stroke-dasharray']=0
-			$ctrl.selectedElement.attributes.attrs[".uml-class-name-rect"]['stroke-dasharray']=0
+			$ctrl.selectedElement.attributes.attrs[".uml-class-attrs-rect"]['stroke-dasharray'] = 0
+			$ctrl.selectedElement.attributes.attrs[".uml-class-methods-rect"]['stroke-dasharray'] = 0
+			$ctrl.selectedElement.attributes.attrs[".uml-class-name-rect"]['stroke-dasharray'] = 0
 		}
 		$ctrl.changeName()
 	}
@@ -176,208 +176,208 @@ const Controller = function (LogicService, $rootScope, $timeout) {
 	}
 
 	//propositos consent
-$ctrl.propositos =  consentLogic.getPurposes() || [];
+	$ctrl.propositos = consentLogic.getPurposes() || [];
 
-$ctrl.visualizarCodigo = false;
-$ctrl.mostrarFormulario = false;
-$ctrl.codigoPurposes = consentLogic.getPurposesText();
-  function atualizarPropositos() {
-    $ctrl.propositos = consentLogic.getPurposes();
+	$ctrl.visualizarCodigo = false;
+	$ctrl.mostrarFormulario = false;
 	$ctrl.codigoPurposes = consentLogic.getPurposesText();
-  }
-
-
-  $ctrl.novoProposito = {
-    name: '',
-    parent: '',
-    comment: ''
-  };
-
-  $ctrl.excluirProposito = function(name) {
-    consentLogic.removePurpose(name);
-    atualizarPropositos();
-  };
-
-  $ctrl.confirmarNovoProposito = function() {
-    if (!$ctrl.novoProposito.name) {
-      alert('Nome é obrigatório!');
-      return;
-    }
-
-    consentLogic.addPurpose({
-      name: $ctrl.novoProposito.name,
-      parent: $ctrl.novoProposito.parent || null,
-      comment: $ctrl.novoProposito.comment || null
-    });
-
-    $ctrl.novoProposito = { name: '', parent: '', comment: '' };
-    $ctrl.mostrarFormulario = false;
-    atualizarPropositos();
-  };
-
-  $ctrl.cancelarNovoProposito = function() {
-    $ctrl.novoProposito = { name: '', parent: '', comment: '' };
-    $ctrl.mostrarFormulario = false;
-  };
-
-  
-//consentimento consent
-$ctrl.visualizarCodigoConsentimentos = false;
-$ctrl.mostrarFormularioConsentimento = false;
-$ctrl.consentimentos = consentLogic.getConsentment();
-$ctrl.codigoConsentimentos = consentLogic.getConsentmentText();
-function atualizarConsentimentos() {
-    $ctrl.consentimentos = consentLogic.getConsentment();
-	$ctrl.codigoConsentimentos = consentLogic.getConsentmentText();
-	waitloadTableNames()
-}
-$ctrl.novoConsentimento = {
-	nome: "",
-	tipo: "allow",
-	propositos: [],
-	tabela: "",
-	colunas: [],
-	condicao: ""
-  };
-
-$ctrl.tabelasDisponiveis
-
-  //essa é a variável q eu quero com as tabelas disponíveis
-  function waitloadTableNames() {
-	setTimeout(() => {
-	  $ctrl.mapTablesDetalhadas = LogicService.buildTablesJson();
-	  $ctrl.tabelasDisponiveis = Array.from($ctrl.mapTablesDetalhadas.values());
-	}, 1000); // ou até 2000ms, conforme necessário
-  }
-  waitloadTableNames()
-
-  $ctrl.getColunas = function (nomeTabela) {
-	const tabela = $ctrl.tabelasDisponiveis.find(t => t.name === nomeTabela);
-	return tabela ? tabela.columns.map(col => col.name) : [];
-  };
-
-  $ctrl.togglePropositoConsentimento = function(pName) {
-	const index = $ctrl.novoConsentimento.propositos.indexOf(pName);
-	if (index === -1) {
-	  $ctrl.novoConsentimento.propositos.push(pName);
-	} else {
-	  $ctrl.novoConsentimento.propositos.splice(index, 1);
+	function atualizarPropositos() {
+		$ctrl.propositos = consentLogic.getPurposes();
+		$ctrl.codigoPurposes = consentLogic.getPurposesText();
 	}
-  };
 
-  $ctrl.toggleColunaConsentimento = function(pName) {
-	const index = $ctrl.novoConsentimento.colunas.indexOf(pName);
-	if (index === -1) {
-	  $ctrl.novoConsentimento.colunas.push(pName);
-	} else {
-	  $ctrl.novoConsentimento.colunas.splice(index, 1);
-	}
-  };
 
-  $ctrl.cancelarNovoConsentimento = function() {
-    $ctrl.novoConsentimento = { nome: "",tipo: "allow",	propositos: [],	tabela: "",	colunas: [],condicao: ""};
-    $ctrl.mostrarFormularioConsentimento = false;
-  };
-
-  $ctrl.confirmarNovoConsentimento = function() {
-    if (!$ctrl.novoConsentimento.nome) {
-      alert('Nome é obrigatório!');
-      return;
-    }
-
-	consentLogic.addConsentment({
-		nome: $ctrl.novoConsentimento.nome,
-		tipo: $ctrl.novoConsentimento.tipo|| "allow",
-		propositos: $ctrl.novoConsentimento.propositos,
-		tabela: $ctrl.novoConsentimento.tabela,
-		colunas: $ctrl.novoConsentimento.colunas,
-		condicao: $ctrl.novoConsentimento.condicao
-	})
-
-    $ctrl.novoConsentimento = { nome: "",tipo: "allow",	propositos: [],	tabela: "",	colunas: [],condicao: ""};
-    $ctrl.mostrarFormularioConsentimento = false;
-    atualizarConsentimentos();
-  };
-
-  $ctrl.removerConsentimento = function(name) {
-    consentLogic.removeConsentment(name);
-    atualizarConsentimentos();
-  };
-
-  //role
-  $ctrl.cargos = consentLogic.getRoles();
-  $ctrl.visualizarCodigoCargos = false;
-  $ctrl.codigoCargos = consentLogic.getRolesText();
-  $ctrl.usuarioTemporario = '';
-  $ctrl.novoCargo = {
-	nome: '',
-	consentimentos: [],
-	usuarios: []
-  };
-  $ctrl.mostrarFormularioCargo = false;
-
-  function atualizarCargos() {
-	$ctrl.roles = consentLogic.getRoles();
-	$ctrl.codigoCargos = consentLogic.getRolesText();
-  };
-
-  $ctrl.removerCargo = function (nome) {
-	consentLogic.removeRole(nome);
-	atualizarCargos();
-  };
-  
-  $ctrl.toggleConsentimentoCargo  = function(consentimentoNome) {
-	const index = $ctrl.novoCargo.consentimentos.indexOf(consentimentoNome);
-	if (index === -1) {
-	  $ctrl.novoCargo.consentimentos.push(consentimentoNome);
-	} else {
-	  $ctrl.novoCargo.consentimentos.splice(index, 1);
-	}
-  };
-
-  $ctrl.adicionarUsuarioAoCargo = function () {
-	if ($ctrl.usuarioTemporario) {
-		$ctrl.novoCargo.usuarios.push($ctrl.usuarioTemporario);
-		$ctrl.usuarioTemporario = '';
-	}
-  };
-
-  $ctrl.removerUsuarioDoCargo = function (index) {
-	$ctrl.novoCargo.usuarios.splice(index, 1);
-  };
-
-  $ctrl.cancelarNovoCargo = function () {
-	$ctrl.mostrarFormularioCargo = false;
-	$ctrl.novoCargo = {
-	  nome: '',
-	  consentimentos: [],
-	  usuarios: []
+	$ctrl.novoProposito = {
+		name: '',
+		parent: '',
+		comment: ''
 	};
-	$ctrl.usuarioTemporario = '';
-	atualizarCargos();
-  };
 
-  $ctrl.confirmarNovoCargo = function () {
-	if (!$ctrl.novoCargo.nome) {
-	  alert('Nome do cargo é obrigatório.');
-	  return;
+	$ctrl.excluirProposito = function (name) {
+		consentLogic.removePurpose(name);
+		atualizarPropositos();
+	};
+
+	$ctrl.confirmarNovoProposito = function () {
+		if (!$ctrl.novoProposito.name) {
+			alert('Nome é obrigatório!');
+			return;
+		}
+
+		consentLogic.addPurpose({
+			name: $ctrl.novoProposito.name,
+			parent: $ctrl.novoProposito.parent || null,
+			comment: $ctrl.novoProposito.comment || null
+		});
+
+		$ctrl.novoProposito = { name: '', parent: '', comment: '' };
+		$ctrl.mostrarFormulario = false;
+		atualizarPropositos();
+	};
+
+	$ctrl.cancelarNovoProposito = function () {
+		$ctrl.novoProposito = { name: '', parent: '', comment: '' };
+		$ctrl.mostrarFormulario = false;
+	};
+
+
+	//consentimento consent
+	$ctrl.visualizarCodigoConsentimentos = false;
+	$ctrl.mostrarFormularioConsentimento = false;
+	$ctrl.consentimentos = consentLogic.getConsentment();
+	$ctrl.codigoConsentimentos = consentLogic.getConsentmentText();
+	function atualizarConsentimentos() {
+		$ctrl.consentimentos = consentLogic.getConsentment();
+		$ctrl.codigoConsentimentos = consentLogic.getConsentmentText();
+		waitloadTableNames()
 	}
-  
-	consentLogic.addRole({
-		nome : $ctrl.novoCargo.nome,
-		consentimentos: $ctrl.novoCargo.consentimentos,
-	  	usuarios: $ctrl.novoCargo.usuarios
-	})
-	$ctrl.cancelarNovoCargo();
-  };
+	$ctrl.novoConsentimento = {
+		nome: "",
+		tipo: "allow",
+		propositos: [],
+		tabela: "",
+		colunas: [],
+		condicao: ""
+	};
+
+	$ctrl.tabelasDisponiveis
+
+	//essa é a variável q eu quero com as tabelas disponíveis
+	function waitloadTableNames() {
+		setTimeout(() => {
+			$ctrl.mapTablesDetalhadas = LogicService.buildTablesJson();
+			$ctrl.tabelasDisponiveis = Array.from($ctrl.mapTablesDetalhadas.values());
+		}, 1000); // ou até 2000ms, conforme necessário
+	}
+	waitloadTableNames()
+
+	$ctrl.getColunas = function (nomeTabela) {
+		const tabela = $ctrl.tabelasDisponiveis.find(t => t.name === nomeTabela);
+		return tabela ? tabela.columns.map(col => col.name) : [];
+	};
+
+	$ctrl.togglePropositoConsentimento = function (pName) {
+		const index = $ctrl.novoConsentimento.propositos.indexOf(pName);
+		if (index === -1) {
+			$ctrl.novoConsentimento.propositos.push(pName);
+		} else {
+			$ctrl.novoConsentimento.propositos.splice(index, 1);
+		}
+	};
+
+	$ctrl.toggleColunaConsentimento = function (pName) {
+		const index = $ctrl.novoConsentimento.colunas.indexOf(pName);
+		if (index === -1) {
+			$ctrl.novoConsentimento.colunas.push(pName);
+		} else {
+			$ctrl.novoConsentimento.colunas.splice(index, 1);
+		}
+	};
+
+	$ctrl.cancelarNovoConsentimento = function () {
+		$ctrl.novoConsentimento = { nome: "", tipo: "allow", propositos: [], tabela: "", colunas: [], condicao: "" };
+		$ctrl.mostrarFormularioConsentimento = false;
+	};
+
+	$ctrl.confirmarNovoConsentimento = function () {
+		if (!$ctrl.novoConsentimento.nome) {
+			alert('Nome é obrigatório!');
+			return;
+		}
+
+		consentLogic.addConsentment({
+			nome: $ctrl.novoConsentimento.nome,
+			tipo: $ctrl.novoConsentimento.tipo || "allow",
+			propositos: $ctrl.novoConsentimento.propositos,
+			tabela: $ctrl.novoConsentimento.tabela,
+			colunas: $ctrl.novoConsentimento.colunas,
+			condicao: $ctrl.novoConsentimento.condicao
+		})
+
+		$ctrl.novoConsentimento = { nome: "", tipo: "allow", propositos: [], tabela: "", colunas: [], condicao: "" };
+		$ctrl.mostrarFormularioConsentimento = false;
+		atualizarConsentimentos();
+	};
+
+	$ctrl.removerConsentimento = function (name) {
+		consentLogic.removeConsentment(name);
+		atualizarConsentimentos();
+	};
+
+	//role
+	$ctrl.cargos = consentLogic.getRoles();
+	$ctrl.visualizarCodigoCargos = false;
+	$ctrl.codigoCargos = consentLogic.getRolesText();
+	$ctrl.usuarioTemporario = '';
+	$ctrl.novoCargo = {
+		nome: '',
+		consentimentos: [],
+		usuarios: []
+	};
+	$ctrl.mostrarFormularioCargo = false;
+
+	function atualizarCargos() {
+		$ctrl.roles = consentLogic.getRoles();
+		$ctrl.codigoCargos = consentLogic.getRolesText();
+	};
+
+	$ctrl.removerCargo = function (nome) {
+		consentLogic.removeRole(nome);
+		atualizarCargos();
+	};
+
+	$ctrl.toggleConsentimentoCargo = function (consentimentoNome) {
+		const index = $ctrl.novoCargo.consentimentos.indexOf(consentimentoNome);
+		if (index === -1) {
+			$ctrl.novoCargo.consentimentos.push(consentimentoNome);
+		} else {
+			$ctrl.novoCargo.consentimentos.splice(index, 1);
+		}
+	};
+
+	$ctrl.adicionarUsuarioAoCargo = function () {
+		if ($ctrl.usuarioTemporario) {
+			$ctrl.novoCargo.usuarios.push($ctrl.usuarioTemporario);
+			$ctrl.usuarioTemporario = '';
+		}
+	};
+
+	$ctrl.removerUsuarioDoCargo = function (index) {
+		$ctrl.novoCargo.usuarios.splice(index, 1);
+	};
+
+	$ctrl.cancelarNovoCargo = function () {
+		$ctrl.mostrarFormularioCargo = false;
+		$ctrl.novoCargo = {
+			nome: '',
+			consentimentos: [],
+			usuarios: []
+		};
+		$ctrl.usuarioTemporario = '';
+		atualizarCargos();
+	};
+
+	$ctrl.confirmarNovoCargo = function () {
+		if (!$ctrl.novoCargo.nome) {
+			alert('Nome do cargo é obrigatório.');
+			return;
+		}
+
+		consentLogic.addRole({
+			nome: $ctrl.novoCargo.nome,
+			consentimentos: $ctrl.novoCargo.consentimentos,
+			usuarios: $ctrl.novoCargo.usuarios
+		})
+		$ctrl.cancelarNovoCargo();
+	};
 };
 
 export default angular.module("app.sidebarControl", [])
 	.component("sidebarControlLogical", {
-	template: template,
-	bindings: {
-		selected: "<",
-		showFeedback: "<",
-	},
-	controller: Controller,
-}).name;
+		template: template,
+		bindings: {
+			selected: "<",
+			showFeedback: "<",
+		},
+		controller: Controller,
+	}).name;

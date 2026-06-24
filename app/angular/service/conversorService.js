@@ -57,9 +57,9 @@ const logicConversorService = ($uibModal, $filter) => {
 
 			buildTables(cell_tables)
 				.then(() => buildExtensions(cell_extensions)
-				.then(() => buildRelations(cell_relations)
-				.then(() => buildAssociatives(cell_associatives)
-				.then(() => resolve(tables)))));
+					.then(() => buildRelations(cell_relations)
+						.then(() => buildAssociatives(cell_associatives)
+							.then(() => resolve(tables)))));
 		});
 	};
 
@@ -287,7 +287,7 @@ const logicConversorService = ($uibModal, $filter) => {
 
 	const buildAttributes = function (table, neighbors, entityReference) {
 		const parents = new Map();
-		const attributes = neighbors.filter(neighbor => neighbor.attributes.type === 'erd.Attribute'|| neighbor.attributes.type === 'erd.Key');
+		const attributes = neighbors.filter(neighbor => neighbor.attributes.type === 'erd.Attribute' || neighbor.attributes.type === 'erd.Key');
 		return new Promise((resolve) => {
 			(function iterate() {
 				const attribute = attributes.shift();
@@ -366,8 +366,8 @@ const logicConversorService = ($uibModal, $filter) => {
 			const name = element.attributes.attrs.text.text;
 			const x = element.attributes.position.x;
 			const y = element.attributes.position.y;
-			const owner = element.attributes.owner;
-			const table = createTableObject(name, x, y, owner);
+			const titular = element.attributes.titular;
+			const table = createTableObject(name, x, y, titular);
 			buildAttributes(table, neighbors, element).then((resp) => resolve(resp));
 		});
 	}
@@ -376,8 +376,8 @@ const logicConversorService = ($uibModal, $filter) => {
 		const name = reference.attributes.attrs.text.text.replace(/ *\([^)]*\) */g, "");
 		const x = reference.attributes.position.x;
 		const y = reference.attributes.position.y - 100;
-		const owner = reference.attributes.owner;
-		const table = createTableObject(name, x, y, owner);
+		const titular = reference.attributes.titular;
+		const table = createTableObject(name, x, y, titular);
 
 		const column = new Column({
 			name: "nome",
@@ -391,12 +391,12 @@ const logicConversorService = ($uibModal, $filter) => {
 		ls.addColumn(createFKColumn(entityReference));
 	}
 
-	const createTableObject = (name, x, y, owner) => {
+	const createTableObject = (name, x, y, titular) => {
 		var table = {
 			"name": name,
 			"columns": [],
 			"connectedTo": [],
-			"owner": owner,
+			"titular": titular,
 			"position": {
 				"x": x,
 				"y": y
@@ -523,9 +523,9 @@ const logicConversorService = ($uibModal, $filter) => {
 			var name = relation.attributes.attrs.text.text;
 			var x = relation.attributes.position.x;
 			var y = relation.attributes.position.y;
-			var owner = relation.attributes.owner;
+			var titular = relation.attributes.titular;
 
-			var table = createTableObject(name, x, y,owner);
+			var table = createTableObject(name, x, y, titular);
 
 			var neighbors = modelGraph.getNeighbors(relation);
 
@@ -558,8 +558,8 @@ const logicConversorService = ($uibModal, $filter) => {
 			const name = relation.attributes.attrs.text.text;
 			const x = relation.attributes.position.x;
 			const y = relation.attributes.position.y;
-			const owner = relation.attributes.owner;
-			const table = createTableObject(name, x, y,owner);
+			const titular = relation.attributes.titular;
+			const table = createTableObject(name, x, y, titular);
 			const neighbors = modelGraph.getNeighbors(relation);
 
 			buildAttributes(table, neighbors).then((table) => {
@@ -740,7 +740,7 @@ const logicConversorService = ($uibModal, $filter) => {
 		return new Promise((resolve) => {
 			const x = relation.attributes.position.x;
 			const y = relation.attributes.position.y;
-			const owner = relation.attributes.owner;
+			const titular = relation.attributes.titular;
 			const neighbors = modelGraph.getNeighbors(relation);
 			const entities = getEntityNeighbors(relation);
 
@@ -750,13 +750,13 @@ const logicConversorService = ($uibModal, $filter) => {
 
 			const newName = entities.reduce((data, entity) => {
 				const entityName = entity.attributes.attrs.text.text;
-				if(data === "") {
+				if (data === "") {
 					return `${entityName}`
 				}
 				return `${data}_${entityName}`
 			}, "")
 
-			const table = createTableObject(newName, x, y,owner);
+			const table = createTableObject(newName, x, y, titular);
 
 			buildAttributes(table, neighbors).then((table) => {
 				const newTable = ls.insertTable(table);
@@ -779,7 +779,7 @@ const logicConversorService = ($uibModal, $filter) => {
 		if (pks.length > 0) {
 			attName = pks[0].attributes.attrs.text.text;
 		}
-		
+
 		return new Column({
 			name: attName,
 			FK: true,

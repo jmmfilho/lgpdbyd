@@ -52,7 +52,7 @@ const logicService = ($rootScope, ModelAPI, LogicFactory, LogicConversorService)
 			cellViewNamespace: joint.shapes,
 		});
 
-		ls.editorActions = new joint.ui.EditorActions({graph: ls.graph, paper: ls.paper});
+		ls.editorActions = new joint.ui.EditorActions({ graph: ls.graph, paper: ls.paper });
 
 		ls.keyboardController = new KeyboardController(ls.paper.$document);
 
@@ -180,7 +180,7 @@ const logicService = ($rootScope, ModelAPI, LogicFactory, LogicConversorService)
 
 			ls.clearSelectedElement();
 
-			if(!ls.keyboardController.spacePressed){
+			if (!ls.keyboardController.spacePressed) {
 				ls.elementSelector.start(evt);
 			} else {
 				ls.editorScroller.startPanning(evt);
@@ -214,7 +214,7 @@ const logicService = ($rootScope, ModelAPI, LogicFactory, LogicConversorService)
 			ls.onLink(link);
 		});
 
-		if(cellView.model.getType() === "View") {
+		if (cellView.model.getType() === "View") {
 			elementActions.removeAction('link');
 		}
 
@@ -252,7 +252,7 @@ const logicService = ($rootScope, ModelAPI, LogicFactory, LogicConversorService)
 				$rootScope.$broadcast('model:loaded', resp.data);
 				if (conversionId != null && conversionId != "" && modelid != "") {
 					ModelAPI.getModel(conversionId, userId).then(function (resp) {
-						const graph =new joint.dia.Graph({}, { cellNamespace: joint.shapes });
+						const graph = new joint.dia.Graph({}, { cellNamespace: joint.shapes });
 						const conceptualJsonModel = (typeof resp.data.model == "string") ? JSON.parse(resp.data.model) : resp.data.model;
 						const promise = LogicConversorService.toLogic(graph.fromJSON(conceptualJsonModel), ls);
 						promise.then(function (tables) {
@@ -277,13 +277,13 @@ const logicService = ($rootScope, ModelAPI, LogicFactory, LogicConversorService)
 		newTable.attributes.position.x = (table.position.x);
 		newTable.attributes.position.y = (table.position.y);
 		newTable.set('name', table.name);
-		if(table.owner!=null){
-			newTable.attributes.owner = table.owner
-			if(table.owner){
-				newTable.attributes.attrs[".uml-class-attrs-rect"]['stroke-dasharray']=5
-				newTable.attributes.attrs[".uml-class-methods-rect"]['stroke-dasharray']=5
-				newTable.attributes.attrs[".uml-class-name-rect"]['stroke-dasharray']=5
-				}
+		if (table.titular != null) {
+			newTable.attributes.titular = table.titular
+			if (table.titular) {
+				newTable.attributes.attrs[".uml-class-attrs-rect"]['stroke-dasharray'] = 5
+				newTable.attributes.attrs[".uml-class-methods-rect"]['stroke-dasharray'] = 5
+				newTable.attributes.attrs[".uml-class-name-rect"]['stroke-dasharray'] = 5
+			}
 		}
 		var columns = table.columns;
 
@@ -324,7 +324,7 @@ const logicService = ($rootScope, ModelAPI, LogicFactory, LogicConversorService)
 		var source = ls.graph.getCell(link.get('source').id);
 		var target = ls.graph.getCell(link.get('target').id);
 
-		if(source.getType() === "View" || target.getType() === "View") {
+		if (source.getType() === "View" || target.getType() === "View") {
 			link.remove();
 			return
 		}
@@ -343,7 +343,7 @@ const logicService = ($rootScope, ModelAPI, LogicFactory, LogicConversorService)
 	}
 
 	ls.clearSelectedElement = function () {
-		if(ls.selectedActions != null) {
+		if (ls.selectedActions != null) {
 			ls.selectedActions.remove();
 			ls.selectedActions = null;
 		}
@@ -398,39 +398,39 @@ const logicService = ($rootScope, ModelAPI, LogicFactory, LogicConversorService)
 			name = name + ": PK";
 		}
 		let lgpdText = " ";
-		for(let i = 2; i>=0; i--){
-			if(tempLgpd[i]){
-				switch(i){
+		for (let i = 2; i >= 0; i--) {
+			if (tempLgpd[i]) {
+				switch (i) {
 					case 2:
-						lgpdText+="[A]";
+						lgpdText += "[A]";
 						break;
 					case 1:
-						lgpdText+="[S]";
+						lgpdText += "[S]";
 						break;
 					case 0:
-						lgpdText+="[P]";
-					break;				
+						lgpdText += "[P]";
+						break;
 				}
-			break;
+				break;
 			}
 		}
-		for(let j = 3; j < tempLgpd.length; j++){
-			if(tempLgpd[j]){
-				switch(j){
+		for (let j = 3; j < tempLgpd.length; j++) {
+			if (tempLgpd[j]) {
+				switch (j) {
 					case 3:
-						lgpdText+="[En]";
+						lgpdText += "[En]";
 						break;
 					case 4:
-						lgpdText+="[Sh]"
+						lgpdText += "[Sh]"
 						break;
 					case 5:
-						lgpdText+="[ChA]"
+						lgpdText += "[ChA]"
 						break;
 					case 6:
-						lgpdText+="[I]"
+						lgpdText += "[I]"
 						break;
 					case 7:
-						lgpdText+="[SI]"
+						lgpdText += "[SI]"
 						break;
 				}
 			}
@@ -523,7 +523,7 @@ const logicService = ($rootScope, ModelAPI, LogicFactory, LogicConversorService)
 		const hasConnections = elements.some(element => {
 			return element.attributes.objects.some(attr => attr.FK);
 		});
-		if(hasConnections) {
+		if (hasConnections) {
 			$rootScope.$broadcast('model:warning-copy');
 		} else {
 			ls.elementSelector.copyAll();
@@ -589,7 +589,7 @@ const logicService = ($rootScope, ModelAPI, LogicFactory, LogicConversorService)
 		elements.filter(isTable).forEach(element => {
 			var obj = {
 				name: element.attributes.name,
-				owner: element.attributes.owner,
+				titular: element.attributes.titular,
 				columns: element.attributes.objects
 			}
 			map.set(element.id, obj);

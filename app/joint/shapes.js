@@ -3,59 +3,59 @@ import _ from "lodash";
 import composedImg from "../img/composto-01.png"
 
 const setText = (element, view, newText) => {
-	element.attributes.attrs.text.text = newText;
-	view.update();
-	const textSize = view.$el.find("text")[0].getBBox().width;
-	if((textSize > 80)) {
-		element.attributes.size.width = (textSize + 10);
-		view.resize();
-	}
+  element.attributes.attrs.text.text = newText;
+  view.update();
+  const textSize = view.$el.find("text")[0].getBBox().width;
+  if ((textSize > 80)) {
+    element.attributes.size.width = (textSize + 10);
+    view.resize();
+  }
 }
 
 const erd = joint.shapes.erd;
 
 erd.Entity = joint.dia.Element.extend({
-	markup:
-		'<g class="rotatable"><g class="scalable"><polygon class="outer"/><polygon class="inner"/></g><text/></g>',
-	defaults: _.defaultsDeep(
-		{
-			type: "erd.Entity",
-			supertype: "Entity",
-			isExtended: false,
-			owner: false,
-			autorelationship: false,
-			size: { width: 80, height: 40 },
-			attrs: {
-				".outer": {
-					fill: "#FFFFFF",
-					stroke: "black",
-					"stroke-width": 1,
-					"stroke-dasharray": 0,
-					points: "100,0 100,60 0,60 0,0",
-				},
-				".inner": {
-					fill: "#2ECC71",
-					stroke: "#27AE60",
-					"stroke-width": 1,
-					points: "95,5 95,55 5,55 5,5",
-					display: "none",
-				},
-				text: {
-					text: "Entity",
-					"font-family": "Arial",
-					"font-size": 14,
-					ref: ".outer",
-					"ref-x": 0.5,
-					"ref-y": 0.5,
-					"x-alignment": "middle",
-					"y-alignment": "middle",
-				},
-			},
-		},
-		joint.dia.Element.prototype.defaults
-	), setText: function (newText, view) {
-			setText(this, view, newText);
-	}
+  markup:
+    '<g class="rotatable"><g class="scalable"><polygon class="outer"/><polygon class="inner"/></g><text/></g>',
+  defaults: _.defaultsDeep(
+    {
+      type: "erd.Entity",
+      supertype: "Entity",
+      isExtended: false,
+      titular: false,
+      autorelationship: false,
+      size: { width: 80, height: 40 },
+      attrs: {
+        ".outer": {
+          fill: "#FFFFFF",
+          stroke: "black",
+          "stroke-width": 1,
+          "stroke-dasharray": 0,
+          points: "100,0 100,60 0,60 0,0",
+        },
+        ".inner": {
+          fill: "#2ECC71",
+          stroke: "#27AE60",
+          "stroke-width": 1,
+          points: "95,5 95,55 5,55 5,5",
+          display: "none",
+        },
+        text: {
+          text: "Entity",
+          "font-family": "Arial",
+          "font-size": 14,
+          ref: ".outer",
+          "ref-x": 0.5,
+          "ref-y": 0.5,
+          "x-alignment": "middle",
+          "y-alignment": "middle",
+        },
+      },
+    },
+    joint.dia.Element.prototype.defaults
+  ), setText: function (newText, view) {
+    setText(this, view, newText);
+  }
 });
 
 erd.Relationship = joint.dia.Element.extend({
@@ -95,9 +95,9 @@ erd.Relationship = joint.dia.Element.extend({
     },
     joint.dia.Element.prototype.defaults,
   ),
-	setText: function (newText, view) {
-		setText(this, view, newText);
-	}
+  setText: function (newText, view) {
+    setText(this, view, newText);
+  }
 });
 
 erd.ISA = joint.dia.Element.extend({
@@ -127,10 +127,10 @@ erd.ISA = joint.dia.Element.extend({
     },
     joint.dia.Element.prototype.defaults
   ),
-	setText: function (newText, view) {
-		this.attributes.attrs.text.text = newText;
-		view.update();
-	}
+  setText: function (newText, view) {
+    this.attributes.attrs.text.text = newText;
+    view.update();
+  }
 });
 
 erd.Associative = joint.dia.Element.extend({
@@ -163,24 +163,24 @@ erd.Associative = joint.dia.Element.extend({
       }
     }
   }, joint.dia.Element.prototype.defaults),
-	setText: function (newText, view) {
-		this.attributes.attrs.text.text = newText;
-		view.update();
-	}
+  setText: function (newText, view) {
+    this.attributes.attrs.text.text = newText;
+    view.update();
+  }
 });
 
 erd.BlockAssociative = joint.dia.Element.extend({
   markup: '<g class="rotatable"><g class="scalable"><polygon class="outer"/></g><text/></g>',
   defaults: _.defaultsDeep({
-      type: 'erd.BlockAssociative',
-      supertype: 'Entity',
-      size: { width: 100, height: 50 },
-      attrs: {
-          '.outer': {
-              fill: 'white', stroke: 'black',
-              points: '100,0 100,60 0,60 0,0'
-          }
+    type: 'erd.BlockAssociative',
+    supertype: 'Entity',
+    size: { width: 100, height: 50 },
+    attrs: {
+      '.outer': {
+        fill: 'white', stroke: 'black',
+        points: '100,0 100,60 0,60 0,0'
       }
+    }
   }, joint.dia.Element.prototype.defaults)
 });
 
@@ -192,7 +192,7 @@ erd.Attribute = joint.dia.Element.extend({
       type: "erd.Attribute",
       supertype: "Attribute",
       cardinality: "(1, 1)",
-      lgpd: [false,false,false,false,false,false,false,false],
+      lgpd: [false, false, false, false, false, false, false, false],
       multivalued: false,
       composed: false,
       size: {
@@ -232,11 +232,11 @@ erd.Attribute = joint.dia.Element.extend({
     },
     joint.dia.Element.prototype.defaults
   ), setText: function (newText, view) {
-		this.attributes.attrs.text.text = newText;
-		if(view != null) {
-			view.update();
-		}
-	}
+    this.attributes.attrs.text.text = newText;
+    if (view != null) {
+      view.update();
+    }
+  }
 });
 
 erd.Key = joint.dia.Element.extend({
@@ -247,7 +247,7 @@ erd.Key = joint.dia.Element.extend({
       type: "erd.Key",
       supertype: "Key",
       cardinality: "(1, 1)",
-      lgpd: [false,false,false,false,false,false,false,false],
+      lgpd: [false, false, false, false, false, false, false, false],
       multivalued: false,
       composed: false,
       size: {
@@ -287,9 +287,9 @@ erd.Key = joint.dia.Element.extend({
     },
     joint.dia.Element.prototype.defaults
   ), setText: function (newText, view) {
-		this.attributes.attrs.text.text = newText;
-		view.update();
-	}
+    this.attributes.attrs.text.text = newText;
+    view.update();
+  }
 });
 
 erd.Link = joint.dia.Link.extend({
@@ -302,45 +302,45 @@ erd.Link = joint.dia.Link.extend({
 });
 
 erd.ComposedAttribute = joint.shapes.basic.Generic.extend({
-	markup: '<g class="rotatable"><g class="scalable"><rect/></g><image/><text/></g>',
-	defaults: joint.util.deepSupplement({
-			type: 'erd.ComposedAttribute',
-			size: { width: 60, height: 40 },
-			attrs: {
-					'rect': { fill: 'transparent', stroke: 'transparent', width: 50, height: 30 },
-					'image': { "xlink:href": composedImg },
-			}
-	}, joint.shapes.basic.Generic.prototype.defaults)
+  markup: '<g class="rotatable"><g class="scalable"><rect/></g><image/><text/></g>',
+  defaults: joint.util.deepSupplement({
+    type: 'erd.ComposedAttribute',
+    size: { width: 60, height: 40 },
+    attrs: {
+      'rect': { fill: 'transparent', stroke: 'transparent', width: 50, height: 30 },
+      'image': { "xlink:href": composedImg },
+    }
+  }, joint.shapes.basic.Generic.prototype.defaults)
 });
 
 erd.InfoButton = joint.linkTools.InfoButton = joint.linkTools.Button.extend({
-	name: 'info-button',
-	options: {
-			markup: [{
-					tagName: 'circle',
-					selector: 'button',
-					attributes: {
-							'r': 7,
-							'fill': '#001DFF',
-							'cursor': 'pointer'
-					}
-			}, {
-					tagName: 'path',
-					selector: 'icon',
-					attributes: {
-							'd': 'M -2 4 2 4 M 0 3 0 0 M -2 -1 1 -1 M -1 -4 1 -4',
-							'fill': 'none',
-							'stroke': '#FFFFFF',
-							'stroke-width': 2,
-							'pointer-events': 'none'
-					}
-			}],
-			distance: 40,
-			offset: 0,
-			action: function(evt) {
-				this.notify('link:options', evt, this.sourceView, this.sourceMagnet, 'source');
-			}
-	}
+  name: 'info-button',
+  options: {
+    markup: [{
+      tagName: 'circle',
+      selector: 'button',
+      attributes: {
+        'r': 7,
+        'fill': '#001DFF',
+        'cursor': 'pointer'
+      }
+    }, {
+      tagName: 'path',
+      selector: 'icon',
+      attributes: {
+        'd': 'M -2 4 2 4 M 0 3 0 0 M -2 -1 1 -1 M -1 -4 1 -4',
+        'fill': 'none',
+        'stroke': '#FFFFFF',
+        'stroke-width': 2,
+        'pointer-events': 'none'
+      }
+    }],
+    distance: 40,
+    offset: 0,
+    action: function (evt) {
+      this.notify('link:options', evt, this.sourceView, this.sourceMagnet, 'source');
+    }
+  }
 });
 
 

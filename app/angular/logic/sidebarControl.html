@@ -13,7 +13,7 @@
 				</a>
 			</li>
 			<li>
-				<a ng-click="$ctrl.selecionarAba('consentimentos')" ng-class="{ active: $ctrl.abaSelecionada === 'consentimentos' }" title="Consentimentos">
+				<a ng-click="$ctrl.selecionarAba('consentimentos')" ng-class="{ active: $ctrl.abaSelecionada === 'consentimentos' }" title="Compartilhados">
 					Consent Policy
 				</a>
 			</li>
@@ -303,13 +303,13 @@
 					/>
 				</div>
 				<div class="checkbox">
-					<label for="owner">
+					<label for="titular">
 						<input
-							id="owner"
+							id="titular"
 							type="checkbox"
-							ng-model="$ctrl.selectedElement.attributes.owner"
-							ng-change="$ctrl.swapOwner($ctrl.selectedElement.attributes.owner)"
-						> {{ 'Owner' | translate }}
+							ng-model="$ctrl.selectedElement.attributes.titular"
+							ng-change="$ctrl.swapTitular($ctrl.selectedElement.attributes.titular)"
+						> {{ 'Titular' | translate }}
 					</label>
 				</div><!-- End .form-group -->
 			</div>

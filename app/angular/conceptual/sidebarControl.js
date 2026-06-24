@@ -52,7 +52,7 @@ const configurator = () => {
 }
 
 
-const controller = function($rootScope, $timeout) {
+const controller = function ($rootScope, $timeout) {
 	const $ctrl = this;
 	$ctrl.visible = true;
 	$ctrl.selectedElement = {}
@@ -86,15 +86,15 @@ const controller = function($rootScope, $timeout) {
 			}
 		});
 	}
-	$ctrl.swapOwner = (value) => {
-		if(value) {
-			$ctrl.selectedElement.element.model.attributes.attrs[".outer"]['stroke-dasharray']=5
+	$ctrl.swapTitular = (value) => {
+		if (value) {
+			$ctrl.selectedElement.element.model.attributes.attrs[".outer"]['stroke-dasharray'] = 5
 		} else {
-			$ctrl.selectedElement.element.model.attributes.attrs[".outer"]['stroke-dasharray']=0
+			$ctrl.selectedElement.element.model.attributes.attrs[".outer"]['stroke-dasharray'] = 0
 		}
 		$ctrl.onUpdate({
 			"event": {
-				"type": "owner",
+				"type": "titular",
 				"value": value
 			}
 		});
@@ -117,7 +117,7 @@ const controller = function($rootScope, $timeout) {
 			}
 		});
 	}
-	$ctrl.updateLgpd = (value,num) => {
+	$ctrl.updateLgpd = (value, num) => {
 		$ctrl.onUpdate({
 			"event": {
 				"type": "attribute.lgpd",
@@ -154,7 +154,7 @@ const controller = function($rootScope, $timeout) {
 			}
 		});
 	}
-	$ctrl.updateAttributeLgpd = (value,num) => {
+	$ctrl.updateAttributeLgpd = (value, num) => {
 		$ctrl.onUpdate({
 			"event": {
 				"type": "attribute.lgpd",
@@ -163,7 +163,7 @@ const controller = function($rootScope, $timeout) {
 			}
 		});
 	}
-	$ctrl.updateKeyLgpd = (value,num) => {
+	$ctrl.updateKeyLgpd = (value, num) => {
 		$ctrl.onUpdate({
 			"event": {
 				"type": "key.lgpd",

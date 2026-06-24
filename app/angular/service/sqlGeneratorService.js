@@ -38,7 +38,7 @@ const sqlGeneratorService = () => {
 			sql += createViewScript(view);
 		});
 
-		sql+= consentLogic.allConsentText();
+		sql += consentLogic.allConsentText();
 
 		return sql;
 	}
@@ -84,12 +84,12 @@ const sqlGeneratorService = () => {
 		return '';
 	}
 
-	const createAlterTable = function(key, table){
+	const createAlterTable = function (key, table) {
 		var alter = "";
 		for (const column of table.columns) {
-			if(column.FK){
+			if (column.FK) {
 				var originTable = createdMap.get(column.tableOrigin.idOrigin)?.name;
-				alter += "ALTER TABLE " + table?.name + " ADD FOREIGN KEY(" + cleanString(column?.name) + ") REFERENCES " + originTable + " ("+ cleanString(column?.name) + ")\n";
+				alter += "ALTER TABLE " + table?.name + " ADD FOREIGN KEY(" + cleanString(column?.name) + ") REFERENCES " + originTable + " (" + cleanString(column?.name) + ")\n";
 			}
 		}
 		return alter;
@@ -99,7 +99,7 @@ const sqlGeneratorService = () => {
 		return `${cleanString(name)} ${checkConstraint.checkExpression || comparasionOperators[checkConstraint.type](checkConstraint.comparativeValue, checkConstraint.comparativeValue2)}`
 	}
 
-	const createTable = function(key, table){
+	const createTable = function (key, table) {
 		var create = "CREATE TABLE " + table?.name + " \n";
 		create += "( \n";
 		const hasCheckConstraint = table.columns.some(column => column.checkConstraint);
@@ -119,80 +119,80 @@ const sqlGeneratorService = () => {
 			if (column.defaultValue) {
 				create += ` DEFAULT '${column.defaultValue}'`
 			}
-			if(column.lgpd.some(value => value === true)){
+			if (column.lgpd.some(value => value === true)) {
 				let lista = []
-				for(let i = 2; i>=0; i--){
-					if(column.lgpd[i]){
-						switch(i){
+				for (let i = 2; i >= 0; i--) {
+					if (column.lgpd[i]) {
+						switch (i) {
 							case 2:
-								lista.push("Anonymized");
+								lista.push("Anonimizado");
 								break;
 							case 1:
-								lista.push("Sensitive");
+								lista.push("Sensível");
 								break;
 							case 0:
-								lista.push("Personal");
-							break;
+								lista.push("Pessoal");
+								break;
 						}
-					break;
+						break;
 					}
 				}
-				for(let j = 3; j < column.lgpd.length; j++){
-					if(column.lgpd[j]){
-						switch(j){
+				for (let j = 3; j < column.lgpd.length; j++) {
+					if (column.lgpd[j]) {
+						switch (j) {
 							case 3:
-								lista.push("Encrypted");
+								lista.push("Criptografado");
 								break;
 							case 4:
-								lista.push("Shared");
+								lista.push("Compartilhado");
 								break;
 							case 5:
-								lista.push("Child and Adolescent")
+								lista.push("Criança/Adolescente")
 								break;
 							case 6:
-								lista.push("Identifier")
+								lista.push("Identificador")
 								break;
 							case 7:
-								lista.push("Semi-Identifier")
+								lista.push("Semi-identificador")
 								break;
 						}
 					}
 				}
 				let tempText = ' '
-				for(let i = 0; i<lista.length; i++){
-					tempText+=lista[i]+' '
+				for (let i = 0; i < lista.length; i++) {
+					tempText += lista[i] + ' '
 				}
-				lgpdText += '/* CONSTRAINT c'+lgpdN+' '+tempText+column.name.split('[')[0]+', */\n'
-				lgpdN+=1
+				lgpdText += '/* CONSTRAINT c' + lgpdN + ' ' + tempText + column.name.split('[')[0] + ', */\n'
+				lgpdN += 1
 			}
 			create += ", " + " \n";
 
-			if (column.FK){
+			if (column.FK) {
 				pending.set(key, table);
 			}
 		})
 
 		if (hasCheckConstraint) {
 			checkConstraint = ` CHECK (${table.columns.filter(column => column.checkConstraint)
-				.map(({ name, checkConstraint }, index) => `${index === 0 ? '': ' AND '}${buildConstraintCheck(name, checkConstraint)}`).join("")})${hasUniqueConstraint ? ',' : ''}`
+				.map(({ name, checkConstraint }, index) => `${index === 0 ? '' : ' AND '}${buildConstraintCheck(name, checkConstraint)}`).join("")})${hasUniqueConstraint ? ',' : ''}`
 			create += checkConstraint + "\n";
 		}
 
 		if (hasUniqueConstraint) {
 			create += ` UNIQUE (${table.columns.filter(column => column.UNIQUE).map(({ name }) => `${name}`)})` + "\n";
 		}
-		if(lgpdN!=1){
-			create+=lgpdText
+		if (lgpdN != 1) {
+			create += lgpdText
 		}
-		create+= ")"
-		if(table?.owner){
-			create += " COMMENT 'Owner'"
+		create += ")"
+		if (table?.titular) {
+			create += " COMMENT 'Titular'"
 		}
 		create += "; \n\n"
 		return create;
 	}
 
-	const cleanString = function(name){
+	const cleanString = function (name) {
 		var newName = name.replace(": PK", "");
 		newName = newName.replace(": FK", "");
 		newName = newName.split('[')[0];
@@ -200,7 +200,7 @@ const sqlGeneratorService = () => {
 	}
 
 	return {
-		generate : _generate
+		generate: _generate
 	}
 
 }
