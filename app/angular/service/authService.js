@@ -1,6 +1,8 @@
 import angular from "angular";
 import { Buffer } from 'buffer';
 
+const API_URL = process.env.API_URL || 'http://localhost:3000'
+
 const authService = function ($http, $cookies) {
 	const service = {};
 
@@ -9,7 +11,7 @@ const authService = function ($http, $cookies) {
 			"username": service.encode(credentials.username),
 			"password": service.encode(credentials.password)
 		}
-		return $http.post("/users/login", body).then((res) => {
+		return $http.post(`${API_URL}/users/login`, body).then((res) => {
 			const user = res.data;
 			const today = new Date();
 			const expired = new Date(today);
@@ -34,7 +36,7 @@ const authService = function ($http, $cookies) {
 			"email": service.encode(credentials.email),
 			"password": service.encode(credentials.password)
 		}
-		return $http.post("/users/create", body).then((res) => {});
+		return $http.post(`${API_URL}/users/create`, body).then((res) => { });
 	};
 
 	service.isAuthenticated = function () {
@@ -46,11 +48,11 @@ const authService = function ($http, $cookies) {
 	};
 
 	service.recovery = (email) => {
-		return $http.post("/users/recovery", { email });
+		return $http.post(`${API_URL}/users/recovery`, { email });
 	};
 
 	service.validateRecovery = (mail, code) => {
-		return $http.get("/users/recovery/validate", {
+		return $http.get(`${API_URL}/users/recovery/validate`, {
 			params: { mail, code },
 		});
 	};
@@ -61,13 +63,13 @@ const authService = function ($http, $cookies) {
 			"newPassword": service.encode(newPassword),
 			"code": code
 		}
-		return $http.post("/users/reset", body);
+		return $http.post(`${API_URL}/users/reset`, body);
 	};
 
 	service.deleteAccount = () => {
 		return $http({
 			method: 'delete',
-			url: '/users/delete',
+			url: `${API_URL}/users/delete`,
 			data: {
 				"userId": service.loggeduser
 			},

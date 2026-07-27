@@ -8,10 +8,15 @@ const path = require("path");
 const cors = require("cors");
 const enforce = require('express-sslify');
 
+const frontendUrl = process.env.FRONTEND_URL || 'http://localhost:8080'
+
 require("dotenv").config();
 
 let app = express();
-app.use(cors());
+app.use(cors({
+	origin: frontendUrl,
+	credentials: true
+}));
 
 if (app.get("env") === "production") {
 	app.use(enforce.HTTPS({ trustProtoHeader: true }));
